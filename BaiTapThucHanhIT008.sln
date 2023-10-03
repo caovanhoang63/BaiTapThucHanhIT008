@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaiTapThucHanhIT008", "BaiTapThucHanhIT008\BaiTapThucHanhIT008.csproj", "{3032B791-C177-4CDF-93C3-D79E490C7EAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1_Bai1.1", "Lab1_Bai1.1\Lab1_Bai1.1.csproj", "{6D1E14A0-936F-4FC7-9207-E60508676E6A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3032B791-C177-4CDF-93C3-D79E490C7EAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3032B791-C177-4CDF-93C3-D79E490C7EAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3032B791-C177-4CDF-93C3-D79E490C7EAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3032B791-C177-4CDF-93C3-D79E490C7EAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D1E14A0-936F-4FC7-9207-E60508676E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D1E14A0-936F-4FC7-9207-E60508676E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D1E14A0-936F-4FC7-9207-E60508676E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D1E14A0-936F-4FC7-9207-E60508676E6A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
