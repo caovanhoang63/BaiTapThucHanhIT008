@@ -1,4 +1,4 @@
-﻿namespace BaiTapThucHanhIT008
+﻿namespace Lab1_Bai1._1
 {
     public abstract class Shape
     {

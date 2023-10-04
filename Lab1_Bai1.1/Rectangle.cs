@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BaiTapThucHanhIT008
+namespace Lab1_Bai1._1
 {
     public class Rectangle : Shape
     {

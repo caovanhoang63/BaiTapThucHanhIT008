@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BaiTapThucHanhIT008
+namespace Lab1_Bai1._1
 {
     public class Circle : Shape
     {
@@ -22,7 +22,7 @@ namespace BaiTapThucHanhIT008
 
         public override void Draw()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }
