@@ -13,7 +13,7 @@ namespace Lab1_Bai1._1
             I.Enter();
             Console.WriteLine("Nhap ban kinh: ");
             R = double.Parse(Console.ReadLine());
-        }
+        }   
 
         public override double Area()
         {
@@ -22,7 +22,8 @@ namespace Lab1_Bai1._1
 
         public override void Draw()
         {
-            
+            Console.WriteLine("Toa do tam hinh tron la:",I);
+            Console.WriteLine("Ban kinh hinh tron la: ",R);
         }
     }
 }

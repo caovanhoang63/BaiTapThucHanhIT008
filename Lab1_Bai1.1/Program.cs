@@ -2,11 +2,14 @@
 
 namespace Lab1_Bai1._1
 {
-    internal class Program
+    internal class 
+        Program
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
+            Rectangle a = new Rectangle();
+            a.Enter();
+            Console.WriteLine(a.Area());
         }
     }
 }

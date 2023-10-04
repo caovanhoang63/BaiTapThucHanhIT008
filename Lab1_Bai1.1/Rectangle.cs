@@ -4,7 +4,14 @@ namespace Lab1_Bai1._1
 {
     public class Rectangle : Shape
     {
-        private Point A { get; set; }
+        public Rectangle()
+        {
+            A = new Point();
+            B = new Point();
+            C = new Point();
+            D = new Point();
+        }
+        private Point A { get; set; } 
         private Point B { get; set; }
         private Point C { get; set; }
         private Point D { get; set; }

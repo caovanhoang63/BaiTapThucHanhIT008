@@ -25,7 +25,7 @@ namespace Lab1_Bai1._1
 
         public override void Draw()
         {
-            Console.WriteLine("Toa do cua hinh chu nhat la:", A, B, C );
+            Console.WriteLine("Toa do cua hinh tam giac la:", A, B, C );
         }
     }
 }
