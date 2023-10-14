@@ -4,26 +4,36 @@ namespace Lab1_Bai1._1
 {
     public class Circle : Shape
     {
-        private Point I { get; set; }
-        private double R { get; set; }
+        public Circle()
+        {
+            name = "Hinh tron";
+            i = new Point();
+        }
+        private Point i;
+        private double r;
+        
+        public Point I { get => i; }
+        public double R { get => r; }
         
         public override void Enter()
         {
             Console.WriteLine("Nhap toa do tam: ");
-            I.Enter();
+            i.Enter();
             Console.WriteLine("Nhap ban kinh: ");
-            R = double.Parse(Console.ReadLine());
+            r = double.Parse(Console.ReadLine());
         }   
 
         public override double Area()
         {
-            return Math.PI * R * R;
+            return Math.PI * r * r;
         }
 
         public override void Draw()
         {
-            Console.WriteLine("Toa do tam hinh tron la:",I);
-            Console.WriteLine("Ban kinh hinh tron la: ",R);
+            Console.WriteLine("Day la hinh" + name);
+            Console.WriteLine("Toa do tam hinh tron la:" + i);
+            Console.WriteLine("Ban kinh hinh tron la: " + r);
+            Console.WriteLine("Dien tich: " + Area());
         }
     }
 }

@@ -2,8 +2,7 @@
 {
     public abstract class Shape
     {
-        protected string Name { get; set; }
-
+        protected string name;
         public abstract void Enter();
         public abstract double Area();
         public abstract void Draw();

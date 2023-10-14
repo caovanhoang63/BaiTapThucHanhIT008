@@ -1,12 +1,28 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 
 namespace Lab1_Bai1._1
 {
     public class Triangle : Shape
     {
-        private Point A { get; set; }
-        private Point B { get; set; }
-        private Point C { get; set; }
+        public Triangle()
+        {
+            name = "Hinh tam giac";
+            a = new Point();
+            b = new Point();
+            c = new Point();
+        }
+    
+        private Point a;
+        private Point b;
+        private Point c;
+        public string Name
+        {
+            get => name;
+        }
+        private Point A { get => a;}
+        private Point B { get => b; }
+        private Point C { get => c; }
         
         public override void Enter()
         {
@@ -20,12 +36,16 @@ namespace Lab1_Bai1._1
 
         public override double Area()
         {
-            return (1 / 2) * Math.Abs((B.x - A.x)*(C.y-A.y)- (C.x - A.x)*(B.y-A.y));
+            return (1 / 2) * Math.Abs((b.x - a.x)*(c.y-a.y)- (c.x - a.x)*(b.y-a.y));
         }
 
         public override void Draw()
         {
-            Console.WriteLine("Toa do cua hinh tam giac la:", A, B, C );
+            Console.WriteLine("Day la hinh: " + name);
+            Console.WriteLine("Hinh tam giac co ba canh");
+            Console.WriteLine("Toa do cua hinh tam giac la:" + a +  b +  c );
+            Console.WriteLine("Dien tich: " + Area());
         }
+        
     }
 }

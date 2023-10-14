@@ -6,37 +6,49 @@ namespace Lab1_Bai1._1
     {
         public Rectangle()
         {
-            A = new Point();
-            B = new Point();
-            C = new Point();
-            D = new Point();
+            name = "Hinh chu nhat";
+            a = new Point();
+            b = new Point();
+            c = new Point();
+            d = new Point();
         }
-        private Point A { get; set; } 
-        private Point B { get; set; }
-        private Point C { get; set; }
-        private Point D { get; set; }
+        
+        
+        private Point a;
+        private Point b;
+        private Point c;
+        private Point d;
+        
+        public string Name {get => name; }
+        public Point A { get => a; }
+        public Point B { get => b; }
+        public Point C { get => c; }
+        public Point D { get => d; } 
 
+        
         public override void Enter()
         {
             Console.WriteLine("Nhap toa do diem thu nhat:");
-            A.Enter();
+            a.Enter();
             Console.WriteLine("Nhap toa do diem thu hai:");
-            B.Enter();
+            b.Enter();
             Console.WriteLine("Nhap toa do diem thu ba:");
-            C.Enter();
+            c.Enter();
             Console.WriteLine("Nhap toa do diem thu tu:");
-            D.Enter();
+            d.Enter();
         }
 
         public override double Area()
         {
-            return Point.Distance(A, B) * Point.Distance(B, C);
+            return Point.Distance(a, b) * Point.Distance(b, c);
         }
 
         public override void Draw()
         {
+            Console.WriteLine("Day la hinh: " + Name);
             Console.WriteLine("Hinh chu nhat co 4 goc vuong");
-            Console.WriteLine("Toa do cua hinh chu nhat la:", A, B, C, D );
+            Console.WriteLine("Toa do cua hinh chu nhat la: {0}, {1}, {2}, {3}", a, b, c, d );
+            Console.WriteLine("Dien tich: {0}", Area());
         }
     }    
 }
