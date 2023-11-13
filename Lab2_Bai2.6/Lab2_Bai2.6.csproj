@@ -46,13 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddingForm.cs" />
-    <Compile Include="AddingForm.Designer.cs" />
+    <Compile Include="AddingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddingForm.designer.cs">
+      <DependentUpon>AddingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DeletingForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DeletingForm.Designer.cs">
       <DependentUpon>DeletingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EnterStudentIdForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnterStudentIdForm.Designer.cs">
+      <DependentUpon>EnterStudentIdForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FeaturesListForm.cs">
       <SubType>Form</SubType>
@@ -88,8 +98,14 @@
     <Compile Include="UpdatingForm.Designer.cs">
       <DependentUpon>UpdatingForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AddingForm.resx">
+      <DependentUpon>AddingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DeletingForm.resx">
       <DependentUpon>DeletingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EnterStudentIdForm.resx">
+      <DependentUpon>EnterStudentIdForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FeaturesListForm.resx">
       <DependentUpon>FeaturesListForm.cs</DependentUpon>

@@ -70,8 +70,8 @@ namespace QLSV_GUI
 
         private void btnUpdateStudent_Click(object sender, EventArgs e)
         {
-            UpdatingForm form = new UpdatingForm();
-            form.Show();
+            EnterStudentIdForm form = new EnterStudentIdForm();
+            form.ShowDialog();
         }
     }
 }

@@ -20,7 +20,6 @@ namespace QLSV_GUI
         }
 
 
-
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             try
@@ -34,26 +33,8 @@ namespace QLSV_GUI
                 float ly = float.Parse(physic.Text);
                 float hoa = float.Parse(chemistry.Text);
                 float dtb = (toan + ly + hoa) / 3;
-                int classID;
 
-                switch (classId.Text)
-                {
-                    case "KTPM2022.1":
-                        classID = 1;
-                        break;
-                    case "KTPM2022.2":
-                        classID = 2;
-                        break;
-                    case "KTPM2022.3":
-                        classID = 3;
-                        break;
-                    case "KTPM2022.4":
-                        classID = 4;
-                        break;
-                    default:
-                        MessageBox.Show("Vui lòng chọn lớp!");
-                        return;
-                }
+                int classID = Program.quanly.ConvertMaLop(classId.Text);
 
                 SinhVien sinhvien = new SinhVien(id.Text, name.Text, classID.ToString(),
                     toan, ly, hoa, dtb);

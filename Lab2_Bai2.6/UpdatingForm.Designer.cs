@@ -155,6 +155,7 @@
             this.btnSubmit.TabIndex = 13;
             this.btnSubmit.Text = "Cập nhật";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click_1);
             // 
             // UpdatingForm
             // 
@@ -177,6 +178,7 @@
             this.Name = "UpdatingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "UpdatingForm";
+            this.Load += new System.EventHandler(this.UpdatingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

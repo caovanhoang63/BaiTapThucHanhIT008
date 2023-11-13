@@ -34,20 +34,20 @@ namespace QLSV
                 string query = "INSERT INTO SINHVIEN(id, ho_ten, diem_toan, diem_ly, diem_hoa, diem_trung_binh, ma_lop) " +
                                "OUTPUT inserted.id " +
                                "VALUES (@id,@ho_ten,@dt,@dl,@dh,@dtb,@malop)";
-               using (SqlCommand command = new SqlCommand(query,_dbConnect)) {
-                    command.Parameters.AddWithValue("@id",s.Mssv);
-                    command.Parameters.AddWithValue("@ho_ten",s.Ten);
-                    command.Parameters.AddWithValue("@dt",s.DiemToan);
-                    command.Parameters.AddWithValue("@dl",s.DiemLy);
-                    command.Parameters.AddWithValue("@dh",s.DiemHoa);
-                    command.Parameters.AddWithValue("@dtb",s.Dtb);
-                    command.Parameters.AddWithValue("@malop",s.Malop);
+                using (SqlCommand command = new SqlCommand(query, _dbConnect)) {
+                    command.Parameters.AddWithValue("@id", s.Mssv);
+                    command.Parameters.AddWithValue("@ho_ten", s.Ten);
+                    command.Parameters.AddWithValue("@dt", s.DiemToan);
+                    command.Parameters.AddWithValue("@dl", s.DiemLy);
+                    command.Parameters.AddWithValue("@dh", s.DiemHoa);
+                    command.Parameters.AddWithValue("@dtb", s.Dtb);
+                    command.Parameters.AddWithValue("@malop", s.Malop);
                     _dbConnect.Open();
                     command.ExecuteScalar();
                     return true;
                 }
             }
-            catch (SqlException ex) 
+            catch (SqlException ex)
             {
                 throw ex;
             }
@@ -59,37 +59,99 @@ namespace QLSV
             {
                 return false;
             }
-            finally { 
+            finally {
                 _dbConnect.Close();
-            }   
+            }
         }
 
         public bool Delete(string id)
         {
             try
             {
-               string query = "DELETE SINHVIEN " +
-                              "OUTPUT deleted.id " +
-                              "WHERE id = @id";
-               using (SqlCommand command = new SqlCommand(query,_dbConnect)) {
-                    command.Parameters.AddWithValue("@id",id);
+                string query = "DELETE SINHVIEN " +
+                               "OUTPUT deleted.id " +
+                               "WHERE id = @id";
+                using (SqlCommand command = new SqlCommand(query, _dbConnect)) {
+                    command.Parameters.AddWithValue("@id", id);
                     _dbConnect.Open();
                     if (command.ExecuteScalar() != null)
                         return true;
                     return false;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
                 return false;
             }
-            finally { 
+            finally {
                 _dbConnect.Close();
-            }   
+            }
         }
 
-       
+
+        public SinhVien GetSinhVienById(string id)
+        {
+            try
+            {
+                string query = "SELECT id, ho_ten, ma_lop, diem_toan, diem_ly, diem_hoa, diem_trung_binh " +
+                               "FROM SINHVIEN " +
+                               "WHERE id = @id";
+                using (SqlCommand command = new SqlCommand(query, _dbConnect))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+
+                    _dbConnect.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string maLop = "KTPM2022.";
+                            switch (reader.GetInt32(2))
+                            {
+                                case 1:
+
+                                    maLop += "1";
+                                    break;
+                                case 2:
+                                    maLop += "2";
+                                    break;
+                                case 3:
+                                    maLop += "3";
+                                    break;
+                                case 4:
+                                    maLop += "4";
+                                    break;
+                            }
+
+                            SinhVien s = new SinhVien(
+                                reader.GetString(0),
+                                reader.GetString(1),
+                                maLop,
+                                (float)reader.GetDecimal(3),
+                                (float)reader.GetDecimal(4),
+                                (float)reader.GetDecimal(5),
+                                (float)reader.GetDecimal(6));
+                            return s;
+                        }
+                        return null;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return null;
+            }
+            finally
+            {
+                _dbConnect.Close();
+            }
+        }
+
+
 
 
         public List<SinhVien> Search(string id, string name)
@@ -97,7 +159,7 @@ namespace QLSV
 
             try
             {
-                List<SinhVien> result = new List<SinhVien> ();
+                List<SinhVien> result = new List<SinhVien>();
                 string query = "SELECT id, ho_ten, ma_lop, diem_toan, diem_ly, diem_hoa, diem_trung_binh " +
                                "FROM SINHVIEN " +
                                "WHERE id = @id OR ho_ten = @ho_ten";
@@ -105,14 +167,14 @@ namespace QLSV
                 {
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@ho_ten", name);
-                    
-                    _dbConnect.Open(); 
+
+                    _dbConnect.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             string maLop = "KTPM2022.";
-                            switch (reader.GetInt32(2) )
+                            switch (reader.GetInt32(2))
                             {
                                 case 1:
                                     maLop += "1";
@@ -128,7 +190,7 @@ namespace QLSV
                                     break;
                             }
 
-                            SinhVien s = new SinhVien (
+                            SinhVien s = new SinhVien(
                                 reader.GetString(0),
                                 reader.GetString(1),
                                 maLop,
@@ -136,17 +198,17 @@ namespace QLSV
                                 (float)reader.GetDecimal(4),
                                 (float)reader.GetDecimal(5),
                                 (float)reader.GetDecimal(6));
-                            result.Add (s);
+                            result.Add(s);
                         }
                     }
 
-                    return result;  
+                    return result;
                 }
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString()); 
+                MessageBox.Show(ex.ToString());
                 return null;
             }
             finally
@@ -167,7 +229,7 @@ namespace QLSV
 
                 using (SqlCommand command = new SqlCommand(query, _dbConnect))
                 {
-                    command.Parameters.AddWithValue("@malop",classID);
+                    command.Parameters.AddWithValue("@malop", classID);
                     _dbConnect.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -213,6 +275,63 @@ namespace QLSV
             finally
             {
                 _dbConnect.Close();
+            }
+        }
+
+
+        public bool Update(SinhVien s)
+        {
+            try
+            {
+                string query = "UPDATE SINHVIEN " +
+                               "SET ho_ten = @ho_ten , diem_toan = @dt , diem_ly = @dl, diem_hoa = @dh, diem_trung_binh= @dtb, ma_lop = @malop " +
+                               "WHERE id = @id";
+                using (SqlCommand command = new SqlCommand(query, _dbConnect))
+                {
+                    command.Parameters.AddWithValue("@id", s.Mssv);
+                    command.Parameters.AddWithValue("@ho_ten", s.Ten);
+                    command.Parameters.AddWithValue("@dt", s.DiemToan);
+                    command.Parameters.AddWithValue("@dl", s.DiemLy);
+                    command.Parameters.AddWithValue("@dh", s.DiemHoa);
+                    command.Parameters.AddWithValue("@dtb", s.Dtb);
+                    command.Parameters.AddWithValue("@malop", s.Malop);
+                    _dbConnect.Open();
+                    command.ExecuteScalar();
+                    return true;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                _dbConnect.Close();
+            }
+        }
+
+        public int ConvertMaLop(string malop)
+        {
+            switch (malop)
+            {
+                case "KTPM2022.1":
+                    return  1;
+                case "KTPM2022.2":
+                    return  2;
+                case "KTPM2022.3":
+                    return  3;
+                case "KTPM2022.4":
+                    return 4;
+                default:
+                    return 0;
             }
         }
     }

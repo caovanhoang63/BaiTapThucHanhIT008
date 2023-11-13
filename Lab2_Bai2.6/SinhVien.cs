@@ -81,7 +81,7 @@ namespace QLSV
                 }
                 else
                 {
-                    throw new Exception("Diem khong hop le");
+                    throw new ArgumentException("Diem khong hop le");
                 }
             }
         }
@@ -97,7 +97,8 @@ namespace QLSV
                 }
                 else
                 {
-                    throw new Exception("Diem khong hop le");
+                    throw new ArgumentException("Diem khong hop le");
+
                 }
             }
         }
@@ -113,12 +114,17 @@ namespace QLSV
                 }
                 else
                 {
-                    throw new Exception("Diem khong hop le");
+                    throw new ArgumentException("Diem khong hop le");
+
                 }
             }
         }
 
 
+        public void TinhDTB()
+        {
+            dtb = (diemLy + DiemToan + diemHoa) / 3;
+        }
 
         private bool ValidateScore(float score)
         {
