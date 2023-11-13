@@ -27,13 +27,13 @@ namespace Lab1_Bai1._3
             double minDouble = find.FindMin(list3);
             string minString = find.FindMin(list);
 
-            Console.WriteLine($"Max int: {maxInt}");
-            Console.WriteLine($"Max double: {maxDouble}");
-            Console.WriteLine($"Max string: {maxString}");
+            Console.WriteLine("Max int: {0}", maxInt);
+            Console.WriteLine("Max double: {0}", maxDouble);
+            Console.WriteLine("Max string: {0}", maxString);
 
-            Console.WriteLine($"Min int: {minInt}");
-            Console.WriteLine($"Min double: {minDouble}");
-            Console.WriteLine($"Min string: {minString}");
+            Console.WriteLine("Min int: {0}", minInt);
+            Console.WriteLine("Min double: {0}", minDouble);
+            Console.WriteLine("Min string: {}", minString);
 
         }
     }
