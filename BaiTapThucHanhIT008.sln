@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2_Bai2.7", "Lab2_Bai2.7\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1_Bai1.4", "Lab1_Bai1.4\Lab1_Bai1.4.csproj", "{9198A5DF-362F-43C9-ACEF-1BB11844D778}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstagramAutoTool", "InstagramAutoTool\InstagramAutoTool.csproj", "{6E58D6D1-8463-462F-902A-5A7241CF3023}"
+EndProject
 
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{FFD0AD60-E569-461D-83F5-1197CF4C5BF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFD0AD60-E569-461D-83F5-1197CF4C5BF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFD0AD60-E569-461D-83F5-1197CF4C5BF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E58D6D1-8463-462F-902A-5A7241CF3023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E58D6D1-8463-462F-902A-5A7241CF3023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E58D6D1-8463-462F-902A-5A7241CF3023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E58D6D1-8463-462F-902A-5A7241CF3023}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

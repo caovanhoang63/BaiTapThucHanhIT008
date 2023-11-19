@@ -1,0 +1,113 @@
+﻿<Window x:Class="InstagramAutoTool.View.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:InstagramAutoTool.View"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Styles/MainStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        
+        <Grid Grid.Row="0">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <Grid Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Tài khoản: </Label>
+                        <TextBox Name="UserName" Style="{DynamicResource BaseTextBox}" Text="useformycode"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 10">
+                        <Label >Mật khẩu:</Label>
+                        <PasswordBox Name="Password" Style="{DynamicResource BasePasswordBox}" Password="Hh12032004@"></PasswordBox>
+                    </StackPanel>
+                    <Button Style="{DynamicResource LinkButtonStyle}">
+                        Dùng nhiều tài khoản
+                    </Button>
+                </StackPanel>
+                
+                
+                
+            </Grid>
+            <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label >Tài khoản đích: </Label>
+                        <TextBox Name="UserNameDest" Style="{DynamicResource BaseTextBox}" Text="_amnothing__"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 10" Visibility="Hidden">
+                        <Label>Mật khẩu:</Label>
+                        <PasswordBox Style="{DynamicResource BasePasswordBox}"></PasswordBox>
+                    </StackPanel>
+                    <Button Style="{DynamicResource LinkButtonStyle}" >
+                        Dùng nhiều tài khoản
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+        
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel x:Name="BuffCheckList" Grid.Column="0" Style="{DynamicResource CheckListContainer}" >
+                <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
+                <CheckBox Name="Like">Auto like</CheckBox>
+                <CheckBox Name="Follow">Auto follow</CheckBox>
+                <CheckBox Name="Comment">Auto comment</CheckBox>
+                <Button x:Name="RunBuffButton" Click="RunBuffButton_OnClick">Chạy buff</Button>
+            </StackPanel>
+            
+            <StackPanel x:Name="CrawlerCheckList" Grid.Column="1" Style="{DynamicResource CheckListContainer}" >
+                <Label Margin="0 0 0 20">	● Crawler:</Label>
+                <CheckBox>Download ảnh</CheckBox>
+                <CheckBox>Download comment</CheckBox>
+                <CheckBox Visibility="Hidden"></CheckBox>
+                <Button x:Name="RunCrawlerButton" Click="RunCrawlerButton_OnClick">Chạy Crawler</Button>
+            </StackPanel>
+            
+            <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Border Width="200" Height="180" Margin="0  0 30 0 " BorderThickness="1" BorderBrush="Black">
+                    <StackPanel Name="RunningInforStackPanel" Margin="10 10">
+                        <TextBlock>Thời gian chạy: <Run Text="{Binding Second}"></Run></TextBlock>
+                        <TextBlock>Số like: <Run Text="{Binding Like}"></Run></TextBlock>
+                        <TextBlock>Số comment: <Run Text="{Binding Comment}"></Run></TextBlock>
+                        <TextBlock>Số follow: <Run Text="{Binding Follow}"></Run></TextBlock>
+                        <TextBlock>Số ảnh đã tải: <Run Text="{Binding ImageDownload}"></Run></TextBlock>
+                        <TextBlock>Số comment đã tải: <Run Text="{Binding CommentDownload}"></Run></TextBlock>
+                        <Button Name="StopButton" Height="30" Background="Brown" IsEnabled="False" Click="StopButton_OnClick">Dừng</Button>
+                    </StackPanel>
+                    
+                </Border>
+            </Grid>
+            
+        </Grid>
+
+    </Grid>
+</Window>
