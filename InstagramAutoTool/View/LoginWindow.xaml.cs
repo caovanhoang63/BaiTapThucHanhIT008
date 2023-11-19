@@ -143,5 +143,9 @@ namespace InstagramAutoTool.View
             }
         }
 
+        private void UserName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
