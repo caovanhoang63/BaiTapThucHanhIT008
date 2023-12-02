@@ -8,18 +8,22 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using InstagramAutoTool.Model;
+using Microsoft.Win32;
+using CheckBox = System.Windows.Controls.CheckBox;
+using MessageBox = System.Windows.MessageBox;
 
 namespace InstagramAutoTool.View
 {
-    public partial class LoginWindow : Window
+    public partial class MainWindow : Window
     {
 
         private Selenium _selenium;
         private CancellationTokenSource _cancellationTokenSource;
         private DispatcherTimer _timer;
-        public LoginWindow()
+        public MainWindow()
         {
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
@@ -129,18 +133,50 @@ namespace InstagramAutoTool.View
             _timer.Stop();
         }
         
-        private void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
+        private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
+
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            var result =  folderBrowserDialog.ShowDialog();
+            if (result != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+            string folderPath = folderBrowserDialog.SelectedPath;
+            StopButton.IsEnabled = true;
+            bool[] listFunc = {false,false};
             foreach (var child in CrawlerCheckList.Children)
             {
                 if (child is CheckBox cb)
                 {
-                    if (cb.IsChecked != null && (bool)cb.IsChecked)
-                    {
-                        Console.WriteLine(cb.Content);
-                    }
+                    if (cb.IsChecked == null  || !(bool)cb.IsChecked)
+                        continue;
+                    
+                    if (cb.Name == "DownloadImage")
+                        listFunc[0] = true;
+                    if (cb.Name == "DownloadComment")
+                        listFunc[1] = true;
                 }
             }
+            
+            if (!listFunc.Contains(true))
+            {
+                MessageBox.Show("Vui lòng chọn chức năng");
+                return;
+            }
+            Console.WriteLine("Run");
+            
+            if (!Login())
+            {
+                MessageBox.Show("Đăng nhập không thành công!");
+                return;
+            }
+            await Task.Delay(4000);
+            
+            _timer.Start();
+            _selenium.RunCraw(UserNameDest.Text, listFunc,folderPath);
+            StopButton.IsEnabled = false;
+            _timer.Stop();
         }
 
         private void UserName_TextChanged(object sender, TextChangedEventArgs e)

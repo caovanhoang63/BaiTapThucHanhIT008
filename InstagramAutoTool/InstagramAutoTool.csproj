@@ -48,6 +48,7 @@
         <Reference Include="System.Drawing.Common, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
           <HintPath>..\packages\System.Drawing.Common.7.0.0\lib\net462\System.Drawing.Common.dll</HintPath>
         </Reference>
+        <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xml"/>
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -74,8 +75,8 @@
         <Compile Include="View\CommentInputDialog.xaml.cs">
           <DependentUpon>CommentInputDialog.xaml</DependentUpon>
         </Compile>
-        <Compile Include="View\LoginWindow.xaml.cs">
-          <DependentUpon>LoginWindow.xaml</DependentUpon>
+        <Compile Include="View\MainWindow.xaml.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
         </Compile>
     </ItemGroup>
     <ItemGroup>
@@ -99,7 +100,7 @@
     <ItemGroup>
       <Page Include="Assets\Styles\MainStyle.xaml" />
       <Page Include="View\CommentInputDialog.xaml" />
-      <Page Include="View\LoginWindow.xaml" />
+      <Page Include="View\MainWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Assets\NetWork\ip.txt" />

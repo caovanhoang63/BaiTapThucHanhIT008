@@ -52,8 +52,6 @@ namespace InstagramAutoTool.Model
             ChromeDriverService service = ChromeDriverService.CreateDefaultService();
             ChromeOptions options = new ChromeOptions();
             
-
-
             //option config
             options.AddArgument("test-type");
             options.AddArgument("--ignore-certificate-errors");
@@ -62,20 +60,8 @@ namespace InstagramAutoTool.Model
             options.AddArgument("--start-maximized");
 
 
-            // ProxyConfig proxy = null;
-            // try
-            // {
-            //     proxy = new ProxyConfig();
-            // }
-            // catch (TimeoutException e)
-            // {
-            //     Console.WriteLine(e);
-            // }
-            //
-            // if (proxy != null)
-            // {
-            //     options.Proxy = proxy.Proxy;
-            // }
+            // ProxyConfig proxy = new ProxyConfig();
+            // options.Proxy = proxy.Proxy;
             //End Config
             
             
@@ -88,18 +74,11 @@ namespace InstagramAutoTool.Model
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
             _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
             _driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
+            
             _cancellationTokenSource = cancellationTokenSource;
             
-            
-            
-            // NetworkAuthenticationHandler handler = new NetworkAuthenticationHandler()
-            // {
-            //     UriMatcher = d => true, //d.Host.Contains("your-host.com")
-            //     Credentials = new PasswordCredentials("vgwqlxby", "cz2bxmm9p7e1")
-            // };
-            //
-            // var networkInterceptor = _driver.Manage().Network;
-            // networkInterceptor.AddAuthenticationHandler(handler);
+            // ProxyAuthentication();
+            _driver.Manage().Network.StartMonitoring();
         }
 
         public IWebDriver Driver => _driver;
@@ -108,6 +87,18 @@ namespace InstagramAutoTool.Model
         public RuningHelper RuningHelper => _runingHelper;
 
 
+        private void ProxyAuthentication()
+        {
+            NetworkAuthenticationHandler handler = new NetworkAuthenticationHandler()
+            {
+                UriMatcher = d => true, //d.Host.Contains("your-host.com")
+                Credentials = new PasswordCredentials("vgwqlxby", "cz2bxmm9p7e1")
+            };
+            _driver.Manage().Network.AddAuthenticationHandler(handler);
+
+        }
+        
+        
 
         /// <summary>
         /// Stop driver
@@ -117,7 +108,7 @@ namespace InstagramAutoTool.Model
             try
             {
                 _driver.Quit();
-
+                _driver.Manage().Network.StopMonitoring();
             }
             catch (Exception e)
             {
@@ -148,7 +139,7 @@ namespace InstagramAutoTool.Model
             
             var loginButton = _driver.FindElements(By.TagName("button"));
             loginButton[1].Click();
-            
+            Thread.Sleep(30000);
         }
         
         
@@ -161,12 +152,7 @@ namespace InstagramAutoTool.Model
         /// <param name="comment"></param>
         public async Task RunBuff(string userDest,bool[] listFunc, string comment = null)
         {
-
-            
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
-
-            int stopFlag = 0;
-
 
             if (listFunc[1])
             {
@@ -176,7 +162,6 @@ namespace InstagramAutoTool.Model
             
             CLickToFirstPost();
 
-            
             string postLink;
             string prevLink = string.Empty;
             while (true)
@@ -203,6 +188,15 @@ namespace InstagramAutoTool.Model
                 prevLink = postLink;
                 //End Stop condition
             }
+        }
+        
+        /// <summary>
+        /// RunCraw
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void RunCraw(string userDest,bool[] listFunc, string folderPath)
+        {
+            
         }
         
         
@@ -317,10 +311,10 @@ namespace InstagramAutoTool.Model
             {
                 link = null;
             }
-
             return Task.FromResult(link);
-
         }
+
+
     }
     
 }

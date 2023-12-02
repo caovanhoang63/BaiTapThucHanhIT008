@@ -1,4 +1,4 @@
-﻿<Window x:Class="InstagramAutoTool.View.LoginWindow"
+﻿<Window x:Class="InstagramAutoTool.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,12 +19,12 @@
     <Grid>
         
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         
-        
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="1">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -69,7 +69,7 @@
         </Grid>
         
         
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -86,8 +86,8 @@
             
             <StackPanel x:Name="CrawlerCheckList" Grid.Column="1" Style="{DynamicResource CheckListContainer}" >
                 <Label Margin="0 0 0 20">	● Crawler:</Label>
-                <CheckBox>Download ảnh</CheckBox>
-                <CheckBox>Download comment</CheckBox>
+                <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
+                <CheckBox Name="DownloadComment">Download comment</CheckBox>
                 <CheckBox Visibility="Hidden"></CheckBox>
                 <Button x:Name="RunCrawlerButton" Click="RunCrawlerButton_OnClick">Chạy Crawler</Button>
             </StackPanel>
