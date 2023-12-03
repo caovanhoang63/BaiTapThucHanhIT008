@@ -54,7 +54,8 @@ namespace InstagramAutoTool.Model
         public Selenium(CancellationTokenSource cancellationTokenSource)
         {
             //Start Config for  Webdriver
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService(@"C:\Users\ADMIN\Downloads\chromedriver-win32\chromedriver-win32", "chromedriver.exe");
+            ChromeOptions options = new ChromeOptions();
             
             //option config
             options.AddArgument("test-type");
@@ -200,61 +201,62 @@ namespace InstagramAutoTool.Model
         /// <exception cref="NotImplementedException"></exception>
         public async Task RunCraw(string userDest, bool[] listFunc, string folderPath)
         {
-            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
+           // _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
+            //Thread.Sleep(1000);
+            CLickToFirstPost(userDest);
+           
+            List<string> Link = new List<string>();
+           
+            HashSet<string> links = new HashSet<string>();
 
-
-             _javaScriptExecutor.ExecuteScript("window.scrollTo(0, document.body.scrollHeight);");
-           // CLickToFirstPost();
-            Thread.Sleep(300);
-
-
-            var images = _driver.FindElements(By.TagName("img"));
-
-            List<string> imageSrcList = new List<string>();
-
-            foreach (var image in images)
+            var container = _driver.FindElement(By.XPath("//div[@class='_aao_']"));
+            do
             {
-                string src = image.GetAttribute("src");
-                imageSrcList.Add(src);
+                var imageContainer =
+                    _driver.FindElements(By.XPath("//li[@class='_acaz']"));
+                Thread.Sleep(100);
+                foreach (var image in imageContainer)
+                {
+                    var link = image.FindElement(By.TagName("img"));
+                    links.Add(link.GetAttribute("src"));
+                }
+                Thread.Sleep(100);
+            } while (NavigateToNextImage(container));
 
-
-            }
-            int counter = 0;
-            foreach (string src in imageSrcList)
+            using (WebClient webClient = new WebClient())
             {
-                if (true)
+                int i = 0;
+                foreach (var link in links)
                 {
-                    // Xây dựng đường dẫn đầy đủ để lưu trữ hình ảnh
-                    string saveAs = Path.Combine(folderPath, counter + ".jpg");
-                     
-                    try
-                    {
-                        // Tải về hình ảnh và lưu vào thư mục
-                        using (WebClient client = new WebClient())
-                        {
-                            client.DownloadFile(new Uri(src), folderPath+ "\\_" +counter + ".jpg");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error downloading image: {ex.Message}");
-                        // Bạn có thể xử lý hoặc bỏ qua lỗi tùy thuộc vào yêu cầu của bạn
-                    }
-                }
-                else
-                {
-                    Console.WriteLine($"Invalid URI: {src}");
-                }
 
-                // Tăng giá trị của counter
-                counter++;
-            
+                    Console.WriteLine(link);
+                    webClient.DownloadFile(new Uri(link), folderPath+ "\\_" + userDest + i + ".jpg");
+                    Console.WriteLine("-------------------------------------");
+                    i++;
+                }
             }
         }
-            /// <summary>
-            /// Auto Follow user
-            /// </summary>
-            private void AutoFollow()
+        private bool NavigateToNextImage(IWebElement container)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+
+                var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
+                Thread.Sleep(500);
+                nextButton.Click();
+                Thread.Sleep(500);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// Auto Follow user
+        /// </summary>
+        private void AutoFollow()
         {
             try
             {
@@ -342,8 +344,18 @@ namespace InstagramAutoTool.Model
                 return;
             post.Click();
         }
+        public void CLickToFirstPost(string userName)
+        {
+            Thread.Sleep(5000);
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userName + "/");
+            Thread.Sleep(5000);
+            var post = _driver.FindElement(By.XPath("//div[@class='_aabd _aa8k  _al3l']"));
+            Thread.Sleep(1000);
+            post.Click();
+            Thread.Sleep(2000);
+        }
 
-        
+
         /// <summary>
         /// Navigate to the next post by pressing Right Arrow Key
         /// </summary>
