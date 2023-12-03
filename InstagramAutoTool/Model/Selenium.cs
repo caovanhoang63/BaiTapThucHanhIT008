@@ -54,7 +54,7 @@ namespace InstagramAutoTool.Model
         public Selenium(CancellationTokenSource cancellationTokenSource)
         {
             //Start Config for  Webdriver
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService(@"C:\Users\ADMIN\Downloads\chromedriver-win32\chromedriver-win32", "chromedriver.exe");
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
             ChromeOptions options = new ChromeOptions();
             
             //option config
@@ -103,8 +103,6 @@ namespace InstagramAutoTool.Model
 
         }
         
-        
-
         /// <summary>
         /// Stop driver
         /// </summary>
@@ -148,7 +146,6 @@ namespace InstagramAutoTool.Model
         }
         
         
-        
         /// <summary>
         /// Runs functions in ListFunc until last userDest's Post
         /// </summary >
@@ -161,11 +158,10 @@ namespace InstagramAutoTool.Model
 
             if (listFunc[1])
             {
-                var autoFollowTask = Task.Run(AutoFollow);
-                await autoFollowTask;
+                await User.AutoFollow(_driver,_runingHelper);
             }
             
-            CLickToFirstPost();
+            User.CLickToFirstPost(_driver,_cancellationTokenSource);
 
             string postLink;
             string prevLink = string.Empty;
@@ -176,17 +172,16 @@ namespace InstagramAutoTool.Model
 
                 if (listFunc[0])
                 {
-                    await Task.Run(LikePost);
+                    await (Post.LikePost(_driver,_runingHelper));
                 }
 
                 if (listFunc[2])
                 {
-                    await CommentPost(comment);          
+                    await Post.CommentPost(_driver,_runingHelper,comment);          
                 }
                 
                 postLink = await NavigateToNextPost();
 
-                
                 //Start Stop condition
                 if (postLink == prevLink)
                     return;
@@ -252,99 +247,7 @@ namespace InstagramAutoTool.Model
             
             }
         }
-            /// <summary>
-            /// Auto Follow user
-            /// </summary>
-            private void AutoFollow()
-        {
-            try
-            {
-                var followButton = _driver.FindElement(By.XPath("//button[@class=' _acan _acap _acas _aj1- _ap30']"));
-                followButton.Click();
-                _runingHelper.Follow++;
-                Console.WriteLine("Follow thành công");
-            }
-            catch
-            {
-                Console.WriteLine("Đã được follow trước đó");
-            }
-        }
 
-
-        /// <summary>
-        /// Auto LikePost
-        /// </summary>
-        private async Task LikePost()
-        {
-            try
-            {
-                await Task.Delay(300);
-                var likeContainer = _driver.FindElement(By.XPath("//span[@class='_aamw']"));
-                var likeButton = likeContainer.FindElement(By.TagName("div"));
-                var label =  likeButton.FindElement(By.TagName("svg"));
-                await Task.Delay(300);
-                if (label.GetAttribute("aria-label") == "Like")
-                {
-                    likeButton.Click();
-                    _runingHelper.Like += 1;
-                }
-                await Task.Delay(300);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Liked");
-            }
-        }
-
-
-        
-        /// <summary>
-        /// Auto Comment Post
-        /// </summary>
-        /// <param name="comment"></param>
-        private async Task CommentPost(string comment)
-        {
-            try
-            {
-                await Task.Delay(300);
-                IWebElement textarea =  _driver.FindElement(By.TagName("textarea"));
-                textarea.Click();
-                textarea = _driver.FindElement(By.TagName("textarea"));
-                textarea.SendKeys(comment);
-                await Task.Delay(500);
-                Actions actions = new Actions(_driver);
-                actions.SendKeys(Keys.Enter);
-                actions.Build().Perform();
-                await Task.Delay(500);
-                _runingHelper.Comment++;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-        
-        
-        
-        
-        /// <summary>
-        /// Click to the first post of the userDest
-        /// </summary>
-        private void CLickToFirstPost()
-        {
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-            
-            var post =  _driver.FindElement(By.XPath("//div[@class='_aabd _aa8k  _al3l']"));
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-            post.Click();
-        }
-
-        
         /// <summary>
         /// Navigate to the next post by pressing Right Arrow Key
         /// </summary>
@@ -365,10 +268,6 @@ namespace InstagramAutoTool.Model
             }
             return Task.FromResult(link);
         }
-
-
-
-
     }
     
 }

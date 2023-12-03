@@ -114,9 +114,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Post.cs" />
     <Compile Include="Model\ProxyConfig.cs" />
     <Compile Include="Model\RuningHelper.cs" />
     <Compile Include="Model\Selenium.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="View\CommentInputDialog.xaml.cs">
       <DependentUpon>CommentInputDialog.xaml</DependentUpon>
     </Compile>
