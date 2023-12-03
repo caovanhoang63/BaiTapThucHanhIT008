@@ -222,7 +222,7 @@ namespace InstagramAutoTool.Model
                     Directory.CreateDirectory(postFolder);
                 }
                 if (listFunc[0])
-                    Post.DownLoadAllImage(_driver,postFolder,userDest);
+                     await Post.DownLoadAllImage(_driver,postFolder,userDest);
                 postLink = await NavigateToNextPost();
                 if (postLink == prevLink)
                     return;

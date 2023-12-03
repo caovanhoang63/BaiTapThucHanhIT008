@@ -70,7 +70,7 @@ namespace InstagramAutoTool.Model
         /// <param name="_driver"></param>
         /// <param name="folderPath"></param>
         /// <param name="userDest"></param>
-        public static void DownLoadAllImage(IWebDriver _driver,string folderPath,string userDest)
+        public static async Task DownLoadAllImage(IWebDriver _driver,string folderPath,string userDest)
         {
             HashSet<string> links = new HashSet<string>();
             IWebElement container;
@@ -86,21 +86,26 @@ namespace InstagramAutoTool.Model
             {
                 try
                 {
-                    var img = container.FindElement(By.TagName("img"));
-                    links.Add(img.GetAttribute("src"));
-                } catch
+                    var imgs = container.FindElements(By.TagName("img"));
+                    foreach (var img in imgs)
+                    {
+                        links.Add(img.GetAttribute("src"));
+                    }
+                }
+                catch
                 {
                     continue;
                 }
-            } while (NavigateToNextImage(container));
+                
+            } while ( await NavigateToNextImage(container));
 
             using (WebClient webClient = new WebClient())
             {
-                int i = 0;
+                int i = 1;
                 foreach (var link in links)
                 {
                     Console.WriteLine(link);
-                    webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + i + ".jpg");
+                    webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
                     Console.WriteLine("-------------------------------------");
                     i++;
                 }
@@ -108,16 +113,20 @@ namespace InstagramAutoTool.Model
         }
         
         
-        private static bool NavigateToNextImage(IWebElement container)
+        private static async Task<bool> NavigateToNextImage(IWebElement container)
         {
             try
             {
-                Thread.Sleep(1000);
+                await Task.Delay(300);
 
                 var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
-                Thread.Sleep(500);
+                
+                await Task.Delay(300);
+                
                 nextButton.Click();
-                Thread.Sleep(500);
+                
+                await Task.Delay(300);
+                
                 return true;
             }
             catch (Exception e)
