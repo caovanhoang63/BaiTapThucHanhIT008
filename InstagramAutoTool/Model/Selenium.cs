@@ -196,63 +196,106 @@ namespace InstagramAutoTool.Model
         /// <exception cref="NotImplementedException"></exception>
         public async Task RunCraw(string userDest, bool[] listFunc, string folderPath)
         {
-           // _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
-            //Thread.Sleep(1000);
-            CLickToFirstPost(userDest);
-           
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
+ 
+            // function dow all images
             List<string> Link = new List<string>();
-           
+
             HashSet<string> links = new HashSet<string>();
 
-            var container = _driver.FindElement(By.XPath("//div[@class='_aao_']"));
-            do
-            {
-                var imageContainer =
-                    _driver.FindElements(By.XPath("//li[@class='_acaz']"));
-                Thread.Sleep(100);
-                foreach (var image in imageContainer)
-                {
-                    var link = image.FindElement(By.TagName("img"));
-                    links.Add(link.GetAttribute("src"));
-                }
-                Thread.Sleep(100);
-            } while (NavigateToNextImage(container));
+            string postLink;
+            string prevLink = string.Empty;
+            await Task.Delay(300);
 
-            using (WebClient webClient = new WebClient())
+            User.CLickToFirstPost(_driver, _cancellationTokenSource);
+            await Task.Delay(500);
+
+            while (true)
             {
-                int i = 0;
-                foreach (var link in links)
+
+
+
+
+                IWebElement container;
+                try
                 {
-                    // Xây dựng đường dẫn đầy đủ để lưu trữ hình ảnh
-                    string saveAs = Path.Combine(folderPath, counter + ".jpg");
-                     
+                    container= _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+                }
+                catch
+                {
+                    container= _driver.FindElement(By.XPath("//div[@class='_aatk _aatl']"));
+                }
+                
+                do
+                {
+                    //var imageContainer =
+                    //    _driver.FindElements(By.XPath("//li[@class='_acaz']"));
+
+                    //foreach (var image in imageContainer)
+                    //{
+                    //    var link = image.FindElement(By.TagName("img"));
+                    //    links.Add(link.GetAttribute("src"));
+                    //}
                     try
                     {
-                        // Tải về hình ảnh và lưu vào thư mục
-                        using (WebClient client = new WebClient())
-                        {
-                            client.DownloadFile(new Uri(src), folderPath+ "\\_" +counter + ".jpg");
-                        }
-                    }
-                    catch (Exception ex)
+                        var img = container.FindElement(By.TagName("img"));
+                        links.Add(img.GetAttribute("src"));
+                    } catch
                     {
-                        Console.WriteLine($"Error downloading image: {ex.Message}");
-                        // Bạn có thể xử lý hoặc bỏ qua lỗi tùy thuộc vào yêu cầu của bạn
+                        continue;
                     }
-                }
-                else
-                {
-                    Console.WriteLine($"Invalid URI: {src}");
-                }
 
-                // Tăng giá trị của counter
-                counter++;
+                    Console.WriteLine("sadassa");
+
+
+                } while (NavigateToNextImage(container));
+
+                using (WebClient webClient = new WebClient())
+                {
+                    int i = 0;
+                    foreach (var link in links)
+                    {
+                        Console.WriteLine(link);
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" + userDest + i + ".jpg");
+                        Console.WriteLine("-------------------------------------");
+                        i++;
+                    }
+
+                    await Task.Delay(500);
+
+                    postLink = await NavigateToNextPost();
+
+                    //Start Stop condition
+                    if (postLink == prevLink)
+                        return;
+                    prevLink = postLink;
+                }
             
-                await Task.Delay(500);
-                _runingHelper.Comment++;
+                //End Stop condition
+            }
+
+
+
+        }
+
+
+        private bool NavigateToNextImage(IWebElement container)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+
+                var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
+                Thread.Sleep(500);
+                nextButton.Click();
+                Thread.Sleep(500);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
-        
         /// <summary>
         /// Navigate to the next post by pressing Right Arrow Key
         /// </summary>
