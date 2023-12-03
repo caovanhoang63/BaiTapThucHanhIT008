@@ -238,7 +238,7 @@ namespace InstagramAutoTool.Model
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        private Task<string> NavigateToNextPost()
+        private  Task<string> NavigateToNextPost()
         {
             string link;
             try
