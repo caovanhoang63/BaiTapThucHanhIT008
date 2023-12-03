@@ -17,7 +17,6 @@ namespace InstagramAutoTool.Model
 
             if (_cancellationTokenSource.IsCancellationRequested)
                 return;
-            
             var post =  _driver.FindElement(By.XPath("//div[@class='_aabd _aa8k  _al3l']"));
             if (_cancellationTokenSource.IsCancellationRequested)
                 return;

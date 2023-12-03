@@ -76,8 +76,8 @@ namespace InstagramAutoTool.Model
             _javaScriptExecutor = (IJavaScriptExecutor)_driver;
             _action = new Actions(_driver);
             
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
-            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
             _driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
             
             _cancellationTokenSource = cancellationTokenSource;
@@ -142,7 +142,7 @@ namespace InstagramAutoTool.Model
             
             var loginButton = _driver.FindElements(By.TagName("button"));
             loginButton[1].Click();
-            Thread.Sleep(30000);
+            Thread.Sleep(5000);
         }
         
         
@@ -223,7 +223,7 @@ namespace InstagramAutoTool.Model
                 }
                 catch
                 {
-                    container= _driver.FindElement(By.XPath("//div[@class='_aatk _aatl']"));
+                    container= _driver.FindElement(By.XPath("//div[contains(@class, '_aatk') and contains(@class,'_aatl')]"));
                 }
                 
                 do
@@ -265,13 +265,12 @@ namespace InstagramAutoTool.Model
 
                     postLink = await NavigateToNextPost();
 
-                    //Start Stop condition
                     if (postLink == prevLink)
                         return;
                     prevLink = postLink;
                 }
+                links.Clear();
             
-                //End Stop condition
             }
 
 
