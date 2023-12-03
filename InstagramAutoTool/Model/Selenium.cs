@@ -201,100 +201,38 @@ namespace InstagramAutoTool.Model
             // function dow all images
             List<string> Link = new List<string>();
 
-            HashSet<string> links = new HashSet<string>();
+            string userNameFolder =  folderPath + "\\" + userDest;
 
+            if (!Directory.Exists(userNameFolder))
+            {
+                Directory.CreateDirectory(userNameFolder);
+            }
             string postLink;
-            string prevLink = string.Empty;
-            await Task.Delay(30);
+            string prevLink = string.Empty; 
+            await Task.Delay(300);
 
             User.CLickToFirstPost(_driver, _cancellationTokenSource);
-            await Task.Delay(30);
-
+            await Task.Delay(500);
+            int count = 1;
             while (true)
             {
-
-
-
-
-                IWebElement container;
-                try
+                string postFolder = userNameFolder + "\\" +"post_" + count;
+                if (!Directory.Exists(postFolder))
                 {
-                    container= _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+                    Directory.CreateDirectory(postFolder);
                 }
-                catch
-                {
-                    container= _driver.FindElement(By.XPath("//div[contains(@class, '_aatk') and contains(@class,'_aatl')]"));
-                }
-                
-                do
-                {
-                    //var imageContainer =
-                    //    _driver.FindElements(By.XPath("//li[@class='_acaz']"));
-
-                    //foreach (var image in imageContainer)
-                    //{
-                    //    var link = image.FindElement(By.TagName("img"));
-                    //    links.Add(link.GetAttribute("src"));
-                    //}
-                    try
-                    {
-                        var img = container.FindElement(By.TagName("img"));
-                        links.Add(img.GetAttribute("src"));
-                    } catch
-                    {
-                        continue;
-                    }
-
-                    Console.WriteLine("sadassa");
-
-
-                } while (NavigateToNextImage(container));
-
-                using (WebClient webClient = new WebClient())
-                {
-                    int i = 0;
-                    foreach (var link in links)
-                    {
-                        Console.WriteLine(link);
-                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" + userDest + i + ".jpg");
-                        Console.WriteLine("-------------------------------------");
-                        i++;
-                    }
-
-                     
-
-                    postLink = await NavigateToNextPost();
-
-                    if (postLink == prevLink)
-                        return;
-                    prevLink = postLink;
-                }
-                links.Clear();
-            
-            }
-
-
-
-        }
-
-
-        private bool NavigateToNextImage(IWebElement container)
-        {
-            try
-            {
-                Thread.Sleep(1000);
-
-                var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
-                Thread.Sleep(500);
-                nextButton.Click();
-                Thread.Sleep(500);
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
+                if (listFunc[0])
+                    Post.DownLoadAllImage(_driver,postFolder,userDest);
+                postLink = await NavigateToNextPost();
+                if (postLink == prevLink)
+                    return;
+                prevLink = postLink;
+                count++;
             }
         }
+
+
+
         /// <summary>
         /// Navigate to the next post by pressing Right Arrow Key
         /// </summary>
