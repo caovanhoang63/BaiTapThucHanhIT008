@@ -12,9 +12,7 @@ namespace InstagramAutoTool.Model
         /// </summary>
         public static void CLickToFirstPost(IWebDriver _driver,CancellationTokenSource _cancellationTokenSource)
         {
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-
+            
             if (_cancellationTokenSource.IsCancellationRequested)
                 return;
             

@@ -205,10 +205,10 @@ namespace InstagramAutoTool.Model
 
             string postLink;
             string prevLink = string.Empty;
-            await Task.Delay(300);
+            await Task.Delay(30);
 
             User.CLickToFirstPost(_driver, _cancellationTokenSource);
-            await Task.Delay(500);
+            await Task.Delay(30);
 
             while (true)
             {
@@ -261,7 +261,7 @@ namespace InstagramAutoTool.Model
                         i++;
                     }
 
-                    await Task.Delay(500);
+                     
 
                     postLink = await NavigateToNextPost();
 
@@ -301,7 +301,7 @@ namespace InstagramAutoTool.Model
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        private Task<string> NavigateToNextPost()
+        private  Task<string> NavigateToNextPost()
         {
             string link;
             try
