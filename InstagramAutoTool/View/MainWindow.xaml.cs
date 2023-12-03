@@ -137,46 +137,54 @@ namespace InstagramAutoTool.View
         {
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            var result =  folderBrowserDialog.ShowDialog();
+
+            var result = folderBrowserDialog.ShowDialog();
+
             if (result != System.Windows.Forms.DialogResult.OK)
             {
                 return;
             }
             string folderPath = folderBrowserDialog.SelectedPath;
             StopButton.IsEnabled = true;
-            bool[] listFunc = {false,false};
+            bool[] listFunc = { false, false };
             foreach (var child in CrawlerCheckList.Children)
             {
                 if (child is CheckBox cb)
                 {
                     if (cb.IsChecked == null  || !(bool)cb.IsChecked)
                         continue;
-                    
+
                     if (cb.Name == "DownloadImage")
                         listFunc[0] = true;
                     if (cb.Name == "DownloadComment")
                         listFunc[1] = true;
                 }
             }
-            
+
             if (!listFunc.Contains(true))
             {
                 MessageBox.Show("Vui lòng chọn chức năng");
                 return;
             }
-            Console.WriteLine("Run");
-            
+            //  Console.WriteLine("Run");
+
             if (!Login())
             {
                 MessageBox.Show("Đăng nhập không thành công!");
                 return;
             }
-            await Task.Delay(4000);
-            
-            _timer.Start();
-            _selenium.RunCraw(UserNameDest.Text, listFunc,folderPath);
-            StopButton.IsEnabled = false;
-            _timer.Stop();
+            else
+            {
+
+                await Task.Delay(4000);
+
+                _timer.Start();
+
+                await _selenium.RunCraw(UserNameDest.Text, listFunc, folderPath);
+                StopButton.IsEnabled = false;
+                _timer.Stop();
+
+            }
         }
 
         private void UserName_TextChanged(object sender, TextChangedEventArgs e)

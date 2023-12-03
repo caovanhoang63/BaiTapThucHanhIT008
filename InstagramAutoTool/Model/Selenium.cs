@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
+using System.Net  ;
+using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+ 
+
 
 namespace InstagramAutoTool.Model
 {
@@ -49,7 +54,7 @@ namespace InstagramAutoTool.Model
         public Selenium(CancellationTokenSource cancellationTokenSource)
         {
             //Start Config for  Webdriver
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService(@"C:\Users\ADMIN\Downloads\chromedriver-win32\chromedriver-win32", "chromedriver.exe");
             ChromeOptions options = new ChromeOptions();
             
             //option config
@@ -189,21 +194,68 @@ namespace InstagramAutoTool.Model
                 //End Stop condition
             }
         }
-        
+
         /// <summary>
         /// RunCraw
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public void RunCraw(string userDest,bool[] listFunc, string folderPath)
+        public async Task RunCraw(string userDest, bool[] listFunc, string folderPath)
         {
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
+
+
+             _javaScriptExecutor.ExecuteScript("window.scrollTo(0, document.body.scrollHeight);");
+           // CLickToFirstPost();
+            Thread.Sleep(300);
+
+
+            var images = _driver.FindElements(By.TagName("img"));
+
+            List<string> imageSrcList = new List<string>();
+
+            foreach (var image in images)
+            {
+                string src = image.GetAttribute("src");
+                imageSrcList.Add(src);
+
+
+            }
+            int counter = 0;
+            foreach (string src in imageSrcList)
+            {
+                if (true)
+                {
+                    // Xây dựng đường dẫn đầy đủ để lưu trữ hình ảnh
+                    string saveAs = Path.Combine(folderPath, counter + ".jpg");
+                     
+                    try
+                    {
+                        // Tải về hình ảnh và lưu vào thư mục
+                        using (WebClient client = new WebClient())
+                        {
+                            client.DownloadFile(new Uri(src), folderPath+ "\\_" +counter + ".jpg");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error downloading image: {ex.Message}");
+                        // Bạn có thể xử lý hoặc bỏ qua lỗi tùy thuộc vào yêu cầu của bạn
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Invalid URI: {src}");
+                }
+
+                // Tăng giá trị của counter
+                counter++;
             
+            }
         }
-        
-        
-        /// <summary>
-        /// Auto Follow user
-        /// </summary>
-        private void AutoFollow()
+            /// <summary>
+            /// Auto Follow user
+            /// </summary>
+            private void AutoFollow()
         {
             try
             {
@@ -282,7 +334,7 @@ namespace InstagramAutoTool.Model
         {
             if (_cancellationTokenSource.IsCancellationRequested)
                 return;
-            
+
             if (_cancellationTokenSource.IsCancellationRequested)
                 return;
             
@@ -313,6 +365,8 @@ namespace InstagramAutoTool.Model
             }
             return Task.FromResult(link);
         }
+
+
 
 
     }
