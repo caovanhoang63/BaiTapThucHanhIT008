@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -59,5 +62,69 @@ namespace InstagramAutoTool.Model
                 Console.WriteLine("Liked");
             }
         }
+
+        
+        /// <summary>
+        /// This function downloads all images from a post
+        /// </summary>
+        /// <param name="_driver"></param>
+        /// <param name="folderPath"></param>
+        /// <param name="userDest"></param>
+        public static void DownLoadAllImage(IWebDriver _driver,string folderPath,string userDest)
+        {
+            HashSet<string> links = new HashSet<string>();
+            IWebElement container;
+            try
+            {
+                container= _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+            }
+            catch
+            {
+                container= _driver.FindElement(By.XPath("//div[contains(@class, '_aatk') and contains(@class,'_aatl')]"));
+            }
+            do
+            {
+                try
+                {
+                    var img = container.FindElement(By.TagName("img"));
+                    links.Add(img.GetAttribute("src"));
+                } catch
+                {
+                    continue;
+                }
+            } while (NavigateToNextImage(container));
+
+            using (WebClient webClient = new WebClient())
+            {
+                int i = 0;
+                foreach (var link in links)
+                {
+                    Console.WriteLine(link);
+                    webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + i + ".jpg");
+                    Console.WriteLine("-------------------------------------");
+                    i++;
+                }
+            }
+        }
+        
+        
+        private static bool NavigateToNextImage(IWebElement container)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+
+                var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
+                Thread.Sleep(500);
+                nextButton.Click();
+                Thread.Sleep(500);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+        
     }
 }
