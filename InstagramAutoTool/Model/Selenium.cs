@@ -54,8 +54,7 @@ namespace InstagramAutoTool.Model
         public Selenium(CancellationTokenSource cancellationTokenSource)
         {
             //Start Config for  Webdriver
-            ChromeDriverService service = ChromeDriverService.CreateDefaultService(@"C:\Users\ADMIN\Downloads\chromedriver-win32\chromedriver-win32", "chromedriver.exe");
-            ChromeOptions options = new ChromeOptions();
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService();
             
             //option config
             options.AddArgument("test-type");
