@@ -5,109 +5,68 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:InstagramAutoTool.View"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800"
+        Title="LoginWindow" Height="380" Width="700"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Assets/Styles/MainStyle.xaml"/>
+                <ResourceDictionary Source="../Assets/Styles/RadioButtonToggleButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     
-    <Grid>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        
-        <Grid Grid.Row="1">
-            
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            
-            <Grid Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label>Tài khoản: </Label>
-                        <TextBox Name="UserName" Style="{DynamicResource BaseTextBox}"  TextChanged="UserName_TextChanged"></TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 10">
-                        <Label >Mật khẩu:</Label>
-                        <PasswordBox Name="Password" Style="{DynamicResource BasePasswordBox}" ></PasswordBox>
-                    </StackPanel>
-                    <Button Style="{DynamicResource LinkButtonStyle}">
-                        Dùng nhiều tài khoản
-                    </Button>
+        <StackPanel  Grid.Column="0" HorizontalAlignment="Center">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Label>Tài khoản: </Label>
+                    <TextBox Name="UserName" Text="useformycode" Style="{DynamicResource BaseTextBox}"  TextChanged="UserName_TextChanged"></TextBox>
                 </StackPanel>
-                
-                
-                
-            </Grid>
-            <Grid Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
-                
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label >Tài khoản đích: </Label>
-                        <TextBox Name="UserNameDest" Style="{DynamicResource BaseTextBox}" ></TextBox>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0 10" Visibility="Hidden">
-                        <Label>Mật khẩu:</Label>
-                        <PasswordBox Style="{DynamicResource BasePasswordBox}"></PasswordBox>
-                    </StackPanel>
-                    <Button Style="{DynamicResource LinkButtonStyle}" >
-                        Dùng nhiều tài khoản
-                    </Button>
+                <StackPanel Orientation="Horizontal" Margin="0 10">
+                    <Label >Mật khẩu:</Label>
+                    <PasswordBox Password="Hh12032004@" Name="Password" Style="{DynamicResource BasePasswordBox}" ></PasswordBox>
                 </StackPanel>
-            </Grid>
-
-        </Grid>
-        
-        
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition Width="250"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            
-            <StackPanel x:Name="BuffCheckList" Grid.Column="0" Style="{DynamicResource CheckListContainer}" >
-                <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
-                <CheckBox Name="Like">Auto like</CheckBox>
-                <CheckBox Name="Follow">Auto follow</CheckBox>
-                <CheckBox Name="Comment">Auto comment</CheckBox>
-                <Button x:Name="RunBuffButton" Click="RunBuffButton_OnClick">Chạy buff</Button>
+                <Button Style="{DynamicResource LinkButtonStyle}">
+                    Dùng nhiều tài khoản
+                </Button>
             </StackPanel>
-            
-            <StackPanel x:Name="CrawlerCheckList" Grid.Column="1" Style="{DynamicResource CheckListContainer}" >
-                <Label Margin="0 0 0 20">	● Crawler:</Label>
-                <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
-                <CheckBox Name="DownloadComment">Download comment</CheckBox>
-                <CheckBox Visibility="Hidden"></CheckBox>
-                <Button x:Name="RunCrawlerButton" Click="RunCrawlerButton_OnClick">Chạy Crawler</Button>
-            </StackPanel>
-            
-            <Grid Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <Border Width="200" Height="180" Margin="0  0 30 0 " BorderThickness="1" BorderBrush="Black">
-                    <StackPanel Name="RunningInforStackPanel" Margin="10 10">
-                        <TextBlock>Thời gian chạy: <Run Text="{Binding Second}"></Run></TextBlock>
-                        <TextBlock>Số like: <Run Text="{Binding Like}"></Run></TextBlock>
-                        <TextBlock>Số comment: <Run Text="{Binding Comment}"></Run></TextBlock>
-                        <TextBlock>Số follow: <Run Text="{Binding Follow}"></Run></TextBlock>
-                        <TextBlock>Số ảnh đã tải: <Run Text="{Binding ImageDownload}"></Run></TextBlock>
-                        <TextBlock>Số comment đã tải: <Run Text="{Binding CommentDownload}"></Run></TextBlock>
-                        <Button Name="StopButton" Height="30" Background="Brown" IsEnabled="False" Click="StopButton_OnClick">Dừng</Button>
-                    </StackPanel>
-                    
-                </Border>
-            </Grid>
-            
-        </Grid>
+            <Separator></Separator>
 
+            
+            <Border  BorderThickness="1" Margin="0 30 0 0 " BorderBrush="Black" >
+                <StackPanel Name="RunningInforStackPanel" Margin="10">
+                    <TextBlock>Thời gian chạy: <Run Text="{Binding Second}"></Run></TextBlock>
+                    <TextBlock>Số like: <Run Text="{Binding Like}"></Run></TextBlock>
+                    <TextBlock>Số comment: <Run Text="{Binding Comment}"></Run></TextBlock>
+                    <TextBlock>Số follow: <Run Text="{Binding Follow}"></Run></TextBlock>
+                    <TextBlock>Số ảnh đã tải: <Run Text="{Binding ImageDownload}"></Run></TextBlock>
+                    <TextBlock>Số comment đã tải: <Run Text="{Binding CommentDownload}"></Run></TextBlock>
+                    <Button Name="StopButton" Height="30" Background="Brown" IsEnabled="False" Click="StopButton_OnClick">Dừng</Button>
+                </StackPanel>
+            </Border>
+            
+        </StackPanel>
+
+
+        <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" Margin="10 0 0 0 ">
+            <StackPanel Margin="10">
+                <ComboBox Margin=" 0 0 0 10">
+                    <ComboBoxItem IsSelected="True" Selected="userListBoxItem_OnSelected">Theo từng user</ComboBoxItem>
+                    <ComboBoxItem Selected="tagsListBoxItem_OnSelected">Theo từng Hashtag</ComboBoxItem>
+                    <ComboBoxItem Selected="postListBoxItem_OnSelected">Theo từng bài đăng</ComboBoxItem>
+                </ComboBox>
+                <Separator/>
+                <Frame Name="FeatureFrame" Source="FeatureOnUser.xaml"
+                       NavigationUIVisibility="Hidden"></Frame>
+
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

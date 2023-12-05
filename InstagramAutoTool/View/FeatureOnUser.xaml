@@ -1,0 +1,57 @@
+﻿<Page x:Class="InstagramAutoTool.View.FeatureOnUser"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:InstagramAutoTool.View"
+      mc:Ignorable="d"
+      Title="FeaturesOnPost" Height="auto" Width="auto">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Styles/MainStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel >
+        
+        <Grid VerticalAlignment="Center" >
+            <StackPanel Margin=" 0 10 ">
+                <StackPanel Orientation="Horizontal">
+                    <Label >Tài khoản đích: </Label>
+                    <TextBox Text="_amnothing__" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
+                             Width="250"></TextBox>
+                </StackPanel>
+  
+                <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
+                    Dùng nhiều tài khoản
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <Separator/>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            
+            <StackPanel x:Name="BuffCheckList" 
+                        Style="{DynamicResource CheckListContainer}" >
+                <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
+                <CheckBox Name="Like">Auto like</CheckBox>
+                <CheckBox Name="Follow">Auto follow</CheckBox>
+                <CheckBox Name="Comment">Auto comment</CheckBox>
+                <Button  Click="RunBuffButton_OnClick">Chạy buff</Button>
+            </StackPanel>
+            
+            <StackPanel x:Name="CrawlerCheckList" Margin="20 0 0 0 "
+                        Style="{DynamicResource CheckListContainer}"
+                        >
+                <Label Margin="0 0 0 20">	● Crawler:</Label>
+                <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
+                <CheckBox Name="DownloadComment">Download comment</CheckBox>
+                <CheckBox Visibility="Hidden"></CheckBox>
+                <Button  Click="RunCrawlerButton_OnClick">Chạy Crawler</Button>
+            </StackPanel>
+        </StackPanel>
+        
+    </StackPanel>
+</Page>

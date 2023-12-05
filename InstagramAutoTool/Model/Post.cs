@@ -76,10 +76,12 @@ namespace InstagramAutoTool.Model
         public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest)
         {
             HashSet<string> links = new HashSet<string>();
+            Console.WriteLine("Done");
+
             IWebElement container;
             try
             {
-                container= _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+                container=  _driver.FindElement(By.XPath("//div[@class='_aamn']"));
             }
             catch
             {
@@ -93,6 +95,7 @@ namespace InstagramAutoTool.Model
                     foreach (var img in imgs)
                     {
                         links.Add(img.GetAttribute("src"));
+                        Console.WriteLine("Done1");
                     }
                 }
                 catch
@@ -102,14 +105,18 @@ namespace InstagramAutoTool.Model
 
             } while (await NavigateToNextImage(container));
 
+            Console.WriteLine("Done");
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
                 foreach (var link in links)
                 {
                     Console.WriteLine(link);
-                    webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
-                    Console.WriteLine("-------------------------------------");
+                    await Task.Run(() =>
+                    {
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
+                        Console.WriteLine(i);
+                    });
                     i++;
                 }
             }
@@ -120,15 +127,9 @@ namespace InstagramAutoTool.Model
         {
             try
             {
-                await Task.Delay(300);
-
                 var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
 
-                await Task.Delay(300);
-
                 nextButton.Click();
-
-                await Task.Delay(300);
 
                 return true;
             }
@@ -172,7 +173,6 @@ namespace InstagramAutoTool.Model
                 await Task.Delay(1000);
 
 
-
                 for (int i = 0; i < commentSpans.Count; i++)
 
                 {
@@ -180,7 +180,10 @@ namespace InstagramAutoTool.Model
                 }
                 try
                 {
-                    File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                    await Task.Run(() =>
+                    {
+                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                    });
                 }
                 catch (Exception ex)
                 {

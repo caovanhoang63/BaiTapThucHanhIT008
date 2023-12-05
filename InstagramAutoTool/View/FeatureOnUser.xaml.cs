@@ -1,0 +1,141 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using InstagramAutoTool.Model;
+using CheckBox = System.Windows.Controls.CheckBox;
+using MessageBox = System.Windows.MessageBox;
+
+namespace InstagramAutoTool.View
+{
+    public partial class FeatureOnUser : Page
+    {
+        private MainWindow _mainWindow;
+        public FeatureOnUser(MainWindow mainWindow)
+        {
+            InitializeComponent();
+            this._mainWindow = mainWindow;
+        }
+        
+        private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.StopButton.IsEnabled = true;
+            bool[] listFunc = {false,false,false} ;
+            string comment = string.Empty;
+            foreach (var child in BuffCheckList.Children)
+            {
+                if (child is CheckBox cb)
+                {
+                    if (cb.IsChecked == null  || !(bool)cb.IsChecked)
+                        continue;
+                    
+                    if (cb.Name == "Like")
+                        listFunc[0] = true;
+                    if (cb.Name == "Follow")
+                        listFunc[1] = true;
+                    if (cb.Name == "Comment")
+                    {
+                        CommentInputDialog commentInputDialog = new CommentInputDialog();
+                        commentInputDialog.ShowDialog();
+                        bool result = commentInputDialog.Accept;
+ 
+                        if (!result)
+                            return;
+                        comment = commentInputDialog.Comment;
+                        Console.WriteLine(comment);
+                        listFunc[2] = true;
+                    }
+                }
+            }
+            
+            if (!listFunc.Contains(true))
+            {
+                MessageBox.Show("Vui lòng chọn chức năng");
+                return;
+            }
+            
+            if (!_mainWindow.Login())
+            {
+                MessageBox.Show("Đăng nhập không thành công!");
+                return;
+            }
+            else
+            {
+                await Task.Delay(4000);
+
+                if (listFunc[2])
+                {
+                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text, listFunc, comment);
+                }
+                else 
+                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text, listFunc);
+                _mainWindow.Selenium.Stop();
+            }
+            
+            _mainWindow.StopButton.IsEnabled = false;
+            
+        }
+        
+        private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+
+            var result = folderBrowserDialog.ShowDialog();
+
+            if (result != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+            string folderPath = folderBrowserDialog.SelectedPath;
+            _mainWindow.StopButton.IsEnabled = true;
+            bool[] listFunc = { false, false };
+            foreach (var child in CrawlerCheckList.Children)
+            {
+                if (child is CheckBox cb)
+                {
+                    if (cb.IsChecked == null  || !(bool)cb.IsChecked)
+                        continue;
+
+                    if (cb.Name == "DownloadImage")
+                        listFunc[0] = true;
+                    if (cb.Name == "DownloadComment")
+                        listFunc[1] = true;
+                }
+            }
+
+            if (!listFunc.Contains(true))
+            {
+                MessageBox.Show("Vui lòng chọn chức năng");
+                return;
+            }
+            //  Console.WriteLine("Run");
+
+            if (!_mainWindow.Login())
+            {
+                MessageBox.Show("Đăng nhập không thành công!");
+                return;
+            }
+            else
+            {
+
+                await Task.Delay(4000);
+
+                try
+                {
+                    await _mainWindow.Selenium.RunCraw(UserNameDest.Text, listFunc, folderPath);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                }
+                
+                _mainWindow.Selenium.Stop();
+                _mainWindow.StopButton.IsEnabled = false;
+
+            }
+        }
+    }
+}

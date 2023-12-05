@@ -122,6 +122,15 @@
     <Compile Include="View\CommentInputDialog.xaml.cs">
       <DependentUpon>CommentInputDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\FeatureOnAPost.xaml.cs">
+      <DependentUpon>FeatureOnAPost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FeatureOnTags.xaml.cs">
+      <DependentUpon>FeatureOnTags.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FeatureOnUser.xaml.cs">
+      <DependentUpon>FeatureOnUser.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -146,7 +155,11 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Assets\Styles\MainStyle.xaml" />
+    <Page Include="Assets\Styles\RadioButtonToggleButtonStyle.xaml" />
     <Page Include="View\CommentInputDialog.xaml" />
+    <Page Include="View\FeatureOnAPost.xaml" />
+    <Page Include="View\FeatureOnTags.xaml" />
+    <Page Include="View\FeatureOnUser.xaml" />
     <Page Include="View\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>

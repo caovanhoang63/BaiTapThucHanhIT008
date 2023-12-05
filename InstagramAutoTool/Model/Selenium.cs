@@ -76,8 +76,8 @@ namespace InstagramAutoTool.Model
             _javaScriptExecutor = (IJavaScriptExecutor)_driver;
             _action = new Actions(_driver);
             
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
-            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
             _driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
             
             _cancellationTokenSource = cancellationTokenSource;
@@ -241,6 +241,53 @@ namespace InstagramAutoTool.Model
                
         }
 
+        
+        
+        public async Task RunCrawByHashTag(string hashTag, bool[] listFunc, string folderPath)
+        {
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + hashTag);
+            
+            // function dow all images
+            List<string> Link = new List<string>();
+
+            string userNameFolder = folderPath + "\\"+ hashTag;
+
+            if (!Directory.Exists(userNameFolder))
+            {
+                Directory.CreateDirectory(userNameFolder);
+            }
+            string postLink;
+            string prevLink = string.Empty;
+            await Task.Delay(300);
+
+            User.CLickToFirstPost(_driver, _cancellationTokenSource);
+            await Task.Delay(500);
+            int count = 1;
+            while (true)
+            {
+                string postFolder = userNameFolder + "\\" +"post_" + count;
+                if (!Directory.Exists(postFolder))
+                {
+                    Directory.CreateDirectory(postFolder);
+                }
+                if (listFunc[0])
+                {
+                    await Post.DownLoadAllImage(_driver, postFolder, "");
+                }
+                if(listFunc[1])
+                {
+                    await Post.DownLoadAllComment(_driver, postFolder, "");
+                }    
+
+                postLink = await NavigateToNextPost();
+                if (postLink == prevLink)
+                    return;
+                prevLink = postLink;
+                count++;
+                
+            }
+               
+        }
 
 
         /// <summary>
@@ -263,6 +310,8 @@ namespace InstagramAutoTool.Model
             }
             return Task.FromResult(link);
         }
+        
+        
     }
     
 }
