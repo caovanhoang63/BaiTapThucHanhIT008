@@ -143,15 +143,40 @@ namespace InstagramAutoTool.Model
             List<string> comments = new List<string>(); 
             try
             {
-                IWebElement commentsContainer = _driver.FindElement(By.XPath("//ul[@class='_a9z6 _a9za']"));
+                IWebElement  Container = _driver.FindElement(By.XPath("//ul[@class='_a9z6 _a9za']"));
                 await Task.Delay(1000);
-                ReadOnlyCollection<IWebElement> commentSpans = commentsContainer.FindElements(By.XPath("" +
+
+                // load comment 
+                while (true)
+                {
+                    try
+                    {
+                        _driver.FindElement(By.XPath("/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div[3]/div/div/li/div/button")).Click();
+                        await Task.Delay(500);
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
+                // get element contain comment 
+                ReadOnlyCollection<IWebElement> commentSpans =  Container.FindElements(By.XPath("" +
                     "//span[@class='_ap3a _aaco _aacu _aacx _aad7 _aade']"));
                 await Task.Delay(1000);
 
-                foreach (var commentSpan in commentSpans )
+                // get element contain username
+                ReadOnlyCollection<IWebElement> username = Container.FindElements(By.XPath(""+"//a[@class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr " +
+                    "x1mh8g0r x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk x1f6kntn xwhw2v2 " +
+                    "xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 " +
+                    "x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']"));
+                await Task.Delay(1000);
+
+
+
+                for (int i = 0; i < commentSpans.Count; i++)
+
                 {
-                    comments.Add(commentSpan.Text);
+                    comments.Add( username[i+1].Text +": " +commentSpans[i].Text);
                 }
                 try
                 {
