@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -139,35 +140,28 @@ namespace InstagramAutoTool.Model
 
         public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath, string userDest)
         {
-           List<string> comment = new List<string>(); 
+            List<string> comments = new List<string>(); 
             try
             {
-                var containUser = _driver.FindElements(By.XPath("//a[@class='x1i10hfl xjqpnuy xa49m3k xqeqjp1 x2hbi6w xdl72j9 x2lah0s xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r" +
-                    " x2lwn1j xeuugli x1hl2dhg xggy1nq x1ja2u2z x1t137rt x1q0g3np x1lku1pv x1a2a7pz x6s0dn4 xjyslct x1ejq31n xd10rxx x1sy0etr x17r0tee x9f619 x1ypdohk" +
-                    " x1f6kntn xwhw2v2 xl56j7k x17ydfre x2b8uid xlyipyv x87ps6o x14atkfc xcdnw81 x1i0vuye xjbqb8w xm3z3ea x1x8b98j x131883w x16mih1h x972fbf xcfux6l x1qhh985 " +
-                    "xm0m39n xt0psk2 xt7dq6l xexx8yu x4uap5 x18d9i69 xkhd6sd x1n2onr6 x1n5bzlp xqnirrm xj34u2y x568u83']"));
+                IWebElement commentsContainer = _driver.FindElement(By.XPath("//ul[@class='_a9z6 _a9za']"));
                 await Task.Delay(1000);
-                 
+                ReadOnlyCollection<IWebElement> commentSpans = commentsContainer.FindElements(By.XPath("" +
+                    "//span[@class='_ap3a _aaco _aacu _aacx _aad7 _aade']"));
+                await Task.Delay(1000);
 
-                var containComment = _driver.FindElements(By.XPath("//span[@class='_ap3a _aaco _aacu _aacx _aad7 _aade']"));
-                await Task.Delay(1000);
-               
-                for ( int i = 0; i < containComment.Count; i++)
+                foreach (var commentSpan in commentSpans )
                 {
-                    comment.Add( containUser[i+1].Text + ": " +containComment[i].Text );
+                    comments.Add(commentSpan.Text);
                 }
-                
                 try
                 {
-
-                    File.WriteAllLines(@"C:\\Users\\ADMIN\\OneDrive\\Máy tính\\New folder", comment);
-
+                    File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Lỗi khi lưu dữ liệu vào tệp tin: {ex.Message}");
                 }
-
+                
             }
             catch(Exception e)
             {
