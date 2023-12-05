@@ -156,17 +156,25 @@ namespace InstagramAutoTool.Model
                 {
                     comment.Add( containUser[i+1].Text + ": " +containComment[i].Text );
                 }
-                
                 try
                 {
+                    
 
-                    File.WriteAllLines(@"C:\\Users\\ADMIN\\OneDrive\\Máy tính\\New folder", comment);
-
+                    using (StreamWriter writer = new StreamWriter(folderPath+"\\"+"comment.txt"))
+                    {
+                        foreach (var line in comment)
+                        {
+                            writer.WriteLine(line);
+                        }
+                        writer.Close();
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Lỗi khi lưu dữ liệu vào tệp tin: {ex.Message}");
                 }
+                
+            
 
             }
             catch(Exception e)
