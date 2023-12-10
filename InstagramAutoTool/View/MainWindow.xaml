@@ -27,11 +27,11 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <Label>Tài khoản: </Label>
-                    <TextBox Name="UserName" Text="useformycode" Style="{DynamicResource BaseTextBox}"  TextChanged="UserName_TextChanged"></TextBox>
+                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}"  TextChanged="UserName_TextChanged"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label >Mật khẩu:</Label>
-                    <PasswordBox Password="Hh12032004@" Name="Password" Style="{DynamicResource BasePasswordBox}" ></PasswordBox>
+                    <PasswordBox  Name="Password" Style="{DynamicResource BasePasswordBox}" ></PasswordBox>
                 </StackPanel>
                 <Button Style="{DynamicResource LinkButtonStyle}">
                     Dùng nhiều tài khoản
