@@ -5,8 +5,44 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:InstagramAutoTool.View"
       mc:Ignorable="d"
-      Title="FeatureOnAPost" Height="450" Width="800">
-    <Grid>
+      Title="FeatureOnAPost" Height="auto" Width="auto">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Styles/MainStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel Margin="10">
+        <StackPanel Orientation="Horizontal">
+            <Label >Link bài viết: </Label>
+            <TextBox Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
+                     Width="250"></TextBox>
+        </StackPanel>
+  
+        <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
+            Nhiều bài viết
+        </Button>
+        <Separator Margin="0 10"></Separator>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            
+            <StackPanel x:Name="BuffCheckList" 
+                        Style="{DynamicResource CheckListContainer}" >
+                <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
+                <CheckBox Name="Like">Auto like</CheckBox>
+                <CheckBox Name="Comment">Auto comment</CheckBox>
+                <Button >Chạy buff</Button>
+            </StackPanel>
+            
+            <StackPanel x:Name="CrawlerCheckList" Margin="20 0 0 0 "
+                        Style="{DynamicResource CheckListContainer}"
+            >
+                <Label Margin="0 0 0 20">	● Crawler:</Label>
+                <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
+                <CheckBox Name="DownloadComment">Download comment</CheckBox>
+                <Button  >Chạy Crawler</Button>
+            </StackPanel>
+        </StackPanel>
         
-    </Grid>
+    </StackPanel>
 </Page>

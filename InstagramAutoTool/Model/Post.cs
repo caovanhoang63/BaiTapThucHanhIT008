@@ -9,6 +9,7 @@ using System.Windows.Markup;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 
 namespace InstagramAutoTool.Model
 {
@@ -75,12 +76,14 @@ namespace InstagramAutoTool.Model
         /// <param name="userDest"></param>
         public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest)
         {
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
             Console.WriteLine("Done");
 
             IWebElement container;
             try
             {
+
                 container=  _driver.FindElement(By.XPath("//div[@class='_aamn']"));
             }
             catch

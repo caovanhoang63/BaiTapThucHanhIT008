@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:InstagramAutoTool.View"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="380" Width="700"
+        Title="LoginWindow" Height="430" Width="700" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
@@ -40,7 +40,7 @@
             <Separator></Separator>
 
             
-            <Border  BorderThickness="1" Margin="0 30 0 0 " BorderBrush="Black" >
+            <Border  BorderThickness="1" Margin="0 80 0 0 " BorderBrush="Black" >
                 <StackPanel Name="RunningInforStackPanel" Margin="10">
                     <TextBlock>Thời gian chạy: <Run Text="{Binding Second}"></Run></TextBlock>
                     <TextBlock>Số like: <Run Text="{Binding Like}"></Run></TextBlock>

@@ -64,7 +64,12 @@ namespace InstagramAutoTool.View
 
                 try
                 {
-                    await _mainWindow.Selenium.RunCrawByHashTag(UserNameDest.Text, listFunc, folderPath);
+                    int limit = 0;
+                    if (PostNum.IsEnabled)
+                        limit = int.Parse(PostNum.Text);
+                    else
+                        limit = -1; 
+                    await _mainWindow.Selenium.RunCrawByHashTag(UserNameDest.Text, limit,listFunc, folderPath);
                 }
                 catch (Exception exception)
                 {
@@ -73,9 +78,17 @@ namespace InstagramAutoTool.View
 
                 _mainWindow.Selenium.Stop();
                 _mainWindow.StopButton.IsEnabled = false;
-
             }
         }
 
+        private void UnlimitedPostNum_OnChecked(object sender, RoutedEventArgs e)
+        {
+            PostNum.IsEnabled = false;
+        }
+
+        private void UnlimitedPostNum_UnChecked(object sender, RoutedEventArgs e)
+        {
+            PostNum.IsEnabled =true;
+        }
     }
 }

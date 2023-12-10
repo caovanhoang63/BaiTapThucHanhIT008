@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -61,19 +62,24 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Đăng nhập không thành công!");
                 return;
             }
-            else
-            {
-                await Task.Delay(4000);
-
-                if (listFunc[2])
-                {
-                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text, listFunc, comment);
-                }
-                else 
-                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text, listFunc);
-                _mainWindow.Selenium.Stop();
-            }
             
+            
+            await Task.Delay(4000);
+            int limit = 0;
+            
+            if (PostNum.IsEnabled)
+                limit = int.Parse(PostNum.Text);
+            else
+                limit = -1;
+            
+            if (listFunc[2])
+            {
+                await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc, comment);
+            }
+            else 
+                await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc);
+            
+            _mainWindow.Selenium.Stop();
             _mainWindow.StopButton.IsEnabled = false;
             
         }
@@ -125,7 +131,12 @@ namespace InstagramAutoTool.View
 
                 try
                 {
-                    await _mainWindow.Selenium.RunCraw(UserNameDest.Text, listFunc, folderPath);
+                    int limit;
+                    if (PostNum.IsEnabled)
+                        limit = int.Parse(PostNum.Text);
+                    else
+                        limit = -1;
+                    await _mainWindow.Selenium.RunCraw(UserNameDest.Text,limit, listFunc, folderPath);
                 }
                 catch (Exception exception)
                 {
@@ -136,6 +147,17 @@ namespace InstagramAutoTool.View
                 _mainWindow.StopButton.IsEnabled = false;
 
             }
+        }
+
+        private void UnlimitedPostNum_OnChecked(object sender, RoutedEventArgs e)
+        {
+            PostNum.IsEnabled = false;
+        }
+
+        private void UnlimitedPostNum_UnChecked(object sender, RoutedEventArgs e)
+        {
+            PostNum.IsEnabled =true;
+
         }
     }
 }

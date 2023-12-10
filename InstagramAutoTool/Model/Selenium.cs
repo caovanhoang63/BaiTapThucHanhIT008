@@ -152,7 +152,7 @@ namespace InstagramAutoTool.Model
         /// <param name="userDest"></param>
         /// <param name="listFunc"></param>
         /// <param name="comment"></param>
-        public async Task RunBuff(string userDest,bool[] listFunc, string comment = null)
+        public async Task RunBuff(string userDest,int limit,bool[] listFunc , string comment = null)
         {
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
 
@@ -165,6 +165,7 @@ namespace InstagramAutoTool.Model
 
             string postLink;
             string prevLink = string.Empty;
+            int count = 1;
             while (true)
             {
                 if (_cancellationTokenSource.IsCancellationRequested)
@@ -182,11 +183,14 @@ namespace InstagramAutoTool.Model
                 
                 postLink = await NavigateToNextPost();
 
-                //Start Stop condition
                 if (postLink == prevLink)
                     return;
                 prevLink = postLink;
-                //End Stop condition
+                count++;
+
+                
+                if (limit != -1 && count > limit)
+                    return;
             }
         }
 
@@ -194,13 +198,11 @@ namespace InstagramAutoTool.Model
         /// RunCraw
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task RunCraw(string userDest, bool[] listFunc, string folderPath)
+        public async Task RunCraw(string userDest,int limit ,bool[] listFunc, string folderPath)
         {
-            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
-
-            
+                _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
                 // function dow all images
-                List<string> Link = new List<string>();
+                List<string> link = new List<string>();
 
                 string userNameFolder = folderPath + "\\"+ userDest;
 
@@ -218,32 +220,30 @@ namespace InstagramAutoTool.Model
                 while (true)
                 {
                     string postFolder = userNameFolder + "\\" +"post_" + count;
+                    
                     if (!Directory.Exists(postFolder))
-                    {
                         Directory.CreateDirectory(postFolder);
-                    }
+                    
                     if (listFunc[0])
-                    {
                         await Post.DownLoadAllImage(_driver, postFolder, userDest);
-                    }
                     if(listFunc[1])
-                    {
                         await Post.DownLoadAllComment(_driver, postFolder, userDest);
-                    }    
 
                     postLink = await NavigateToNextPost();
                     if (postLink == prevLink)
                         return;
                     prevLink = postLink;
                     count++;
-                
+
+                    if (limit != -1 && count > limit)
+                        return;
                 }
                
         }
 
         
         
-        public async Task RunCrawByHashTag(string hashTag, bool[] listFunc, string folderPath)
+        public async Task RunCrawByHashTag(string hashTag,int limit ,bool[] listFunc, string folderPath)
         {
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + hashTag);
             
@@ -284,7 +284,8 @@ namespace InstagramAutoTool.Model
                     return;
                 prevLink = postLink;
                 count++;
-                
+                if (limit != -1 && count > limit)
+                    return;
             }
                
         }

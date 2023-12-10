@@ -20,13 +20,31 @@
                 <StackPanel Margin=" 0 10 ">
                     <StackPanel Orientation="Horizontal">
                         <Label>HashTag: </Label>
-                        <TextBox Text="_amnothing__" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
+                        <TextBox Margin="10 0 0 0" Text="_amnothing__" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
                                  Width="250"></TextBox>
                     </StackPanel>
-  
                     <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
                         Nhập nhiều HashTag
                     </Button>
+                    <StackPanel Orientation="Horizontal" Margin="0 10">
+                        <Label>Số bài viết: </Label>
+                        <TextBox  Name="PostNum" Style="{DynamicResource BaseTextBox}"
+                                 Width="250"></TextBox>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" >
+                        <CheckBox Margin="2 0 0 0" VerticalAlignment="Center"
+                                  Content="Không giới hạn số lượng bài viết"
+                                  Checked="UnlimitedPostNum_OnChecked"
+                                  Unchecked="UnlimitedPostNum_UnChecked">
+                            <CheckBox.Resources>
+                                <Style TargetType="{x:Type Path}">
+                                    <Setter Property="FlowDirection" Value="LeftToRight" />
+                                </Style>
+                            </CheckBox.Resources>
+                        </CheckBox>
+                    </StackPanel>
+
                 </StackPanel>
             </Grid>
         
