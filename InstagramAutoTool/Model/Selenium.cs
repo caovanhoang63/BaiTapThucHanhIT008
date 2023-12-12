@@ -26,8 +26,10 @@ namespace InstagramAutoTool.Model
         private Actions _action;
         private CancellationTokenSource _cancellationTokenSource;
         private RuningHelper _runingHelper;
-
-
+        private List<Pair<string,string>> _listSourceAcount;
+        
+        
+        
         public Selenium(string userProfile,CancellationTokenSource cancellationTokenSource)
         {
             var options = new ChromeOptions();
@@ -91,6 +93,11 @@ namespace InstagramAutoTool.Model
 
         public RuningHelper RuningHelper => _runingHelper;
 
+        public List<Pair<string, string>> ListSourceAcount
+        {
+            get => _listSourceAcount;
+            set => _listSourceAcount = value;
+        }
 
         private void ProxyAuthentication()
         {
@@ -160,7 +167,7 @@ namespace InstagramAutoTool.Model
             {
                 await User.AutoFollow(_driver,_runingHelper);
             }
-            
+        
             User.CLickToFirstPost(_driver,_cancellationTokenSource);
 
             string postLink;
@@ -180,7 +187,7 @@ namespace InstagramAutoTool.Model
                 {
                     await Post.CommentPost(_driver,_runingHelper,comment);          
                 }
-                
+            
                 postLink = await NavigateToNextPost();
 
                 if (postLink == prevLink)
@@ -188,10 +195,11 @@ namespace InstagramAutoTool.Model
                 prevLink = postLink;
                 count++;
 
-                
+            
                 if (limit != -1 && count > limit)
                     return;
             }
+            
         }
 
         /// <summary>
@@ -200,44 +208,46 @@ namespace InstagramAutoTool.Model
         /// <exception cref="NotImplementedException"></exception>
         public async Task RunCraw(string userDest,int limit ,bool[] listFunc, string folderPath)
         {
-                _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
-                // function dow all images
-                List<string> link = new List<string>();
 
-                string userNameFolder = folderPath + "\\"+ userDest;
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
+            // function dow all images
+            List<string> link = new List<string>();
 
-                if (!Directory.Exists(userNameFolder))
-                {
-                    Directory.CreateDirectory(userNameFolder);
-                }
-                string postLink;
-                string prevLink = string.Empty;
-                await Task.Delay(300);
+            string userNameFolder = folderPath + "\\"+ userDest;
 
-                User.CLickToFirstPost(_driver, _cancellationTokenSource);
-                await Task.Delay(500);
-                int count = 1;
-                while (true)
-                {
-                    string postFolder = userNameFolder + "\\" +"post_" + count;
-                    
-                    if (!Directory.Exists(postFolder))
-                        Directory.CreateDirectory(postFolder);
-                    
-                    if (listFunc[0])
-                        await Post.DownLoadAllImage(_driver, postFolder, userDest);
-                    if(listFunc[1])
-                        await Post.DownLoadAllComment(_driver, postFolder, userDest);
+            if (!Directory.Exists(userNameFolder))
+            {
+                Directory.CreateDirectory(userNameFolder);
+            }
+            string postLink;
+            string prevLink = string.Empty;
+            await Task.Delay(300);
 
-                    postLink = await NavigateToNextPost();
-                    if (postLink == prevLink)
-                        return;
-                    prevLink = postLink;
-                    count++;
+            User.CLickToFirstPost(_driver, _cancellationTokenSource);
+            await Task.Delay(500);
+            int count = 1;
+            while (true)
+            {
+                string postFolder = userNameFolder + "\\" +"post_" + count;
+            
+                if (!Directory.Exists(postFolder))
+                    Directory.CreateDirectory(postFolder);
+            
+                if (listFunc[0])
+                    await Post.DownLoadAllImage(_driver, postFolder, userDest);
+                if(listFunc[1])
+                    await Post.DownLoadAllComment(_driver, postFolder, userDest);
 
-                    if (limit != -1 && count > limit)
-                        return;
-                }
+                postLink = await NavigateToNextPost();
+                if (postLink == prevLink)
+                    return;
+                prevLink = postLink;
+                count++;
+
+                if (limit != -1 && count > limit)
+                    return;
+            }
+
                
         }
 

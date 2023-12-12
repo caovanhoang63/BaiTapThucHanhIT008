@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,66 +23,68 @@ namespace InstagramAutoTool.View
         
         private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainWindow.StopButton.IsEnabled = true;
-            bool[] listFunc = {false,false,false} ;
-            string comment = string.Empty;
-            foreach (var child in BuffCheckList.Children)
-            {
-                if (child is CheckBox cb)
+            foreach (var account in _mainWindow.ListAccount)
+            { 
+                _mainWindow.StopButton.IsEnabled = true;
+                bool[] listFunc = {false,false,false} ;
+                string comment = string.Empty;
+                foreach (var child in BuffCheckList.Children)
                 {
-                    if (cb.IsChecked == null  || !(bool)cb.IsChecked)
-                        continue;
-                    
-                    if (cb.Name == "Like")
-                        listFunc[0] = true;
-                    if (cb.Name == "Follow")
-                        listFunc[1] = true;
-                    if (cb.Name == "Comment")
+                    if (child is CheckBox cb)
                     {
-                        CommentInputDialog commentInputDialog = new CommentInputDialog();
-                        commentInputDialog.ShowDialog();
-                        bool result = commentInputDialog.Accept;
- 
-                        if (!result)
-                            return;
-                        comment = commentInputDialog.Comment;
-                        Console.WriteLine(comment);
-                        listFunc[2] = true;
+                        if (cb.IsChecked == null  || !(bool)cb.IsChecked)
+                            continue;
+                        
+                        if (cb.Name == "Like")
+                            listFunc[0] = true;
+                        if (cb.Name == "Follow")
+                            listFunc[1] = true;
+                        if (cb.Name == "Comment")
+                        {
+                            CommentInputDialog commentInputDialog = new CommentInputDialog();
+                            commentInputDialog.ShowDialog();
+                            bool result = commentInputDialog.Accept;
+     
+                            if (!result)
+                                return;
+                            comment = commentInputDialog.Comment;
+                            Console.WriteLine(comment);
+                            listFunc[2] = true;
+                        }
                     }
                 }
+                
+                if (!listFunc.Contains(true))
+                {
+                    MessageBox.Show("Vui lòng chọn chức năng");
+                    return;
+                }
+                
+                if (!_mainWindow.Login(account.First,account.Second))
+                {
+                    MessageBox.Show("Đăng nhập không thành công!");
+                    continue;
+                }
+                
+                
+                await Task.Delay(4000);
+                int limit = 0;
+                
+                if (PostNum.IsEnabled)
+                    limit = int.Parse(PostNum.Text);
+                else
+                    limit = -1;
+                
+                if (listFunc[2])
+                {
+                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc, comment);
+                }
+                else 
+                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc);
+                
+                _mainWindow.Selenium.Stop();
+                _mainWindow.StopButton.IsEnabled = false;
             }
-            
-            if (!listFunc.Contains(true))
-            {
-                MessageBox.Show("Vui lòng chọn chức năng");
-                return;
-            }
-            
-            if (!_mainWindow.Login())
-            {
-                MessageBox.Show("Đăng nhập không thành công!");
-                return;
-            }
-            
-            
-            await Task.Delay(4000);
-            int limit = 0;
-            
-            if (PostNum.IsEnabled)
-                limit = int.Parse(PostNum.Text);
-            else
-                limit = -1;
-            
-            if (listFunc[2])
-            {
-                await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc, comment);
-            }
-            else 
-                await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc);
-            
-            _mainWindow.Selenium.Stop();
-            _mainWindow.StopButton.IsEnabled = false;
-            
         }
         
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
@@ -119,7 +122,9 @@ namespace InstagramAutoTool.View
             }
             //  Console.WriteLine("Run");
 
-            if (!_mainWindow.Login())
+            if (!_mainWindow.Login(
+                    _mainWindow.ListAccount[0].First,
+                    _mainWindow.ListAccount[0].Second))
             {
                 MessageBox.Show("Đăng nhập không thành công!");
                 return;

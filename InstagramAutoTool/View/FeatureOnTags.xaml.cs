@@ -53,12 +53,7 @@ namespace InstagramAutoTool.View
                 return;
             }
             //  Console.WriteLine("Run");
-
-            if (!_mainWindow.Login())
-            {
-                MessageBox.Show("Đăng nhập không thành công!");
-            }
-            else
+            
             {
                 await Task.Delay(4000);
 

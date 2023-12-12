@@ -14,6 +14,7 @@ using InstagramAutoTool.Model;
 using Microsoft.Win32;
 using CheckBox = System.Windows.Controls.CheckBox;
 using MessageBox = System.Windows.MessageBox;
+using RichTextBox = System.Windows.Forms.RichTextBox;
 
 namespace InstagramAutoTool.View
 {
@@ -23,13 +24,14 @@ namespace InstagramAutoTool.View
         private Selenium _selenium;
         private CancellationTokenSource _cancellationTokenSource;
         private DispatcherTimer _timer;
-        
         private FeatureOnUser _userPage;
         private FeatureOnAPost _postPage;
         private FeatureOnTags _tagsPage;
         private List<Pair<string, string>> _listAccount;
+        
+            
         public Selenium Selenium => _selenium;
-
+        public List<Pair<string, string>> ListAccount => _listAccount;
         
         public MainWindow()
         {
@@ -66,12 +68,12 @@ namespace InstagramAutoTool.View
 
         }
 
-        public bool Login()
+        public bool Login(string username,string password)
         {
             try
             {
                 _selenium = new Selenium(_cancellationTokenSource);
-                _selenium.Login(UserName.Text,Password.Password);
+                _selenium.Login(username,password);
                 return true;
             }
             catch (Exception e)
@@ -120,11 +122,23 @@ namespace InstagramAutoTool.View
             FeatureFrame.Navigate(_postPage);
         }
 
+        private FlowDocument _document;
+        
         private void MultiAccount_OnChecked(object sender, RoutedEventArgs e)
         {
             UserName.IsEnabled = false;
             Password.IsEnabled = false;
-            ImportTextDialog dialog = new ImportTextDialog();
+
+            ImportTextDialog dialog;
+            if (_document != null)
+            {
+                dialog = new ImportTextDialog(_document);
+            }
+            else
+            {
+                dialog = new ImportTextDialog();
+            }
+            
             if (dialog.ShowDialog() != true)
             {
                 UserName.IsEnabled = true;
@@ -144,16 +158,15 @@ namespace InstagramAutoTool.View
                 _listAccount.Add(new Pair<string, string>(acount[0],acount[1]));
             }
 
-            foreach (var account in _listAccount)
-            {
-                Console.WriteLine(account.First + " "+ account.Second);
-            }
+            _document = dialog.Document;
         }
 
         private void MultiAccount_OnUnChecked(object sender, RoutedEventArgs e)
         {
             UserName.IsEnabled = true;
             Password.IsEnabled = true;
+            _listAccount.Clear();
+            _listAccount.Add(new Pair<string, string>(UserName.Text,Password.Password));
         }
     }
 }
