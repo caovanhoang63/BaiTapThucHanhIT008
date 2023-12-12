@@ -158,6 +158,9 @@ namespace InstagramAutoTool.View
                 if (acount.Length != 2)
                 {
                     MessageBox.Show("Nhập tài khoản không đúng định dạng");
+                    UserName.IsEnabled = true;
+                    Password.IsEnabled = true;
+                    MultiAccount.IsChecked = false;
                     return;
                 }
                 _listAccount.Add(new Pair<string, string>(acount[0],acount[1]));
