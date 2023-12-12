@@ -33,14 +33,14 @@
                     <Label >Mật khẩu:</Label>
                     <PasswordBox  Name="Password" Style="{DynamicResource BasePasswordBox}" ></PasswordBox>
                 </StackPanel>
-                <Button Style="{DynamicResource LinkButtonStyle}">
+                <ToggleButton x:Name="MultiAccount" Checked="MultiAccount_OnChecked" 
+                              Unchecked="MultiAccount_OnUnChecked">
                     Dùng nhiều tài khoản
-                </Button>
+                </ToggleButton>
             </StackPanel>
             <Separator></Separator>
 
-            
-            <Border  BorderThickness="1" Margin="0 80 0 0 " BorderBrush="Black" >
+            <Border  BorderThickness="1" Margin="0 78 0 0 " BorderBrush="Black" >
                 <StackPanel Name="RunningInforStackPanel" Margin="10">
                     <TextBlock>Thời gian chạy: <Run Text="{Binding Second}"></Run></TextBlock>
                     <TextBlock>Số like: <Run Text="{Binding Like}"></Run></TextBlock>
@@ -65,7 +65,6 @@
                 <Separator/>
                 <Frame Name="FeatureFrame" Source="FeatureOnUser.xaml"
                        NavigationUIVisibility="Hidden"></Frame>
-
             </StackPanel>
         </Border>
     </Grid>
