@@ -27,11 +27,15 @@ namespace InstagramAutoTool.View
         private FeatureOnUser _userPage;
         private FeatureOnAPost _postPage;
         private FeatureOnTags _tagsPage;
+        private List<Pair<string, string>> _listAccount;
+        public Selenium Selenium => _selenium;
+
         
         public MainWindow()
         {
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
+            _listAccount = new List<Pair<string, string>>();
             
             _timer = new DispatcherTimer
             {
@@ -47,7 +51,6 @@ namespace InstagramAutoTool.View
 
         }
 
-        public Selenium Selenium => _selenium;
 
         private void TimerOnTick(Object sender, EventArgs e)
         {
@@ -78,7 +81,6 @@ namespace InstagramAutoTool.View
         }
         
         
-
         
         
         private void StopButton_OnClick(object sender, RoutedEventArgs e)
@@ -116,6 +118,42 @@ namespace InstagramAutoTool.View
         private void postListBoxItem_OnSelected(object sender, RoutedEventArgs e)
         {
             FeatureFrame.Navigate(_postPage);
+        }
+
+        private void MultiAccount_OnChecked(object sender, RoutedEventArgs e)
+        {
+            UserName.IsEnabled = false;
+            Password.IsEnabled = false;
+            ImportTextDialog dialog = new ImportTextDialog();
+            if (dialog.ShowDialog() != true)
+            {
+                UserName.IsEnabled = true;
+                Password.IsEnabled = true;
+                MultiAccount.IsChecked = false;
+                return;
+            }
+
+            foreach (var line in dialog.Lines)
+            {
+                string[] acount = line.Trim().Split(' ');
+                if (acount.Length != 2)
+                {
+                    MessageBox.Show("Nhập tài khoản không đúng định dạng");
+                    return;
+                }
+                _listAccount.Add(new Pair<string, string>(acount[0],acount[1]));
+            }
+
+            foreach (var account in _listAccount)
+            {
+                Console.WriteLine(account.First + " "+ account.Second);
+            }
+        }
+
+        private void MultiAccount_OnUnChecked(object sender, RoutedEventArgs e)
+        {
+            UserName.IsEnabled = true;
+            Password.IsEnabled = true;
         }
     }
 }

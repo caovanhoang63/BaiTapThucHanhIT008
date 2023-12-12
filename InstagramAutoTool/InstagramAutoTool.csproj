@@ -114,6 +114,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Pair.cs" />
     <Compile Include="Model\Post.cs" />
     <Compile Include="Model\ProxyConfig.cs" />
     <Compile Include="Model\RuningHelper.cs" />
@@ -130,6 +131,9 @@
     </Compile>
     <Compile Include="View\FeatureOnUser.xaml.cs">
       <DependentUpon>FeatureOnUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ImportTextDialog.xaml.cs">
+      <DependentUpon>ImportTextDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -160,6 +164,7 @@
     <Page Include="View\FeatureOnAPost.xaml" />
     <Page Include="View\FeatureOnTags.xaml" />
     <Page Include="View\FeatureOnUser.xaml" />
+    <Page Include="View\ImportTextDialog.xaml" />
     <Page Include="View\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
