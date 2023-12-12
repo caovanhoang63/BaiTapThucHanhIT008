@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InstagramAutoTool.View"
         mc:Ignorable="d"
         Title="ImportMultiAccountDialog" Height="450" Width="500"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterOwner"
+        Loaded="ImportTextDialog_OnLoaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
