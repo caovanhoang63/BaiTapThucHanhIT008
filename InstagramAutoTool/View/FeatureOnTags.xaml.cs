@@ -18,14 +18,21 @@ namespace InstagramAutoTool.View
             InitializeComponent();
             _mainWindow = mainWindow;
         }
+
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
+
+            if (!_mainWindow.CheckHaveUserAccount())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                return;
+            }
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
             var result = folderBrowserDialog.ShowDialog();
 
-            if (result != System.Windows.Forms.DialogResult.OK)
+            if (result != DialogResult.OK)
             {
                 return;
             }
@@ -52,8 +59,13 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn chức năng");
                 return;
             }
+
+            if (!_mainWindow.Login())
+            {
+                MessageBox.Show("Đang nhập thất bại");
+                return;
+            }
             //  Console.WriteLine("Run");
-            
             {
                 await Task.Delay(4000);
 

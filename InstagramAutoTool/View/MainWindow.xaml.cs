@@ -28,8 +28,6 @@ namespace InstagramAutoTool.View
         private FeatureOnAPost _postPage;
         private FeatureOnTags _tagsPage;
         private List<Pair<string, string>> _listAccount;
-        
-            
         public Selenium Selenium => _selenium;
         public List<Pair<string, string>> ListAccount => _listAccount;
         
@@ -68,12 +66,17 @@ namespace InstagramAutoTool.View
 
         }
 
-        public bool Login(string username,string password)
+        public bool Login(string username = null,string password = null)
         {
             try
             {
                 _selenium = new Selenium(_cancellationTokenSource);
-                _selenium.Login(username,password);
+                if (username == null)
+                {
+                    _selenium.Login(_listAccount[0].First,_listAccount[0].Second);
+                }
+                else 
+                    _selenium.Login(username,password);
                 return true;
             }
             catch (Exception e)
@@ -130,6 +133,8 @@ namespace InstagramAutoTool.View
             Password.IsEnabled = false;
 
             ImportTextDialog dialog;
+            
+            
             if (_document != null)
             {
                 dialog = new ImportTextDialog(_document);
@@ -146,7 +151,7 @@ namespace InstagramAutoTool.View
                 MultiAccount.IsChecked = false;
                 return;
             }
-
+            _listAccount.Clear();
             foreach (var line in dialog.Lines)
             {
                 string[] acount = line.Trim().Split(' ');
@@ -166,7 +171,17 @@ namespace InstagramAutoTool.View
             UserName.IsEnabled = true;
             Password.IsEnabled = true;
             _listAccount.Clear();
-            _listAccount.Add(new Pair<string, string>(UserName.Text,Password.Password));
+        }
+
+        public bool CheckHaveUserAccount()
+        {
+            if (UserName.Text == String.Empty && _listAccount.Count == 0  )
+                return false;
+            if (MultiAccount.IsChecked != true) 
+            {
+                _listAccount.Add(new Pair<string, string>(UserName.Text,Password.Password));
+            }
+            return true;
         }
     }
 }
