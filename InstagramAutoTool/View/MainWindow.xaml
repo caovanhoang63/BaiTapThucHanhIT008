@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:InstagramAutoTool.View"
         mc:Ignorable="d"
         Title="LoginWindow" Height="430" Width="700" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" 
+        >
     
     <Window.Resources>
         <ResourceDictionary>
@@ -27,7 +28,7 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <Label>Tài khoản: </Label>
-                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}"  TextChanged="UserName_TextChanged"></TextBox>
+                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}"></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label >Mật khẩu:</Label>
@@ -57,8 +58,8 @@
 
         <Border Grid.Column="1" BorderThickness="1" BorderBrush="Black" Margin="10 0 0 0 ">
             <StackPanel Margin="10">
-                <ComboBox Margin=" 0 0 0 10">
-                    <ComboBoxItem IsSelected="True" Selected="userListBoxItem_OnSelected">Theo từng user</ComboBoxItem>
+                <ComboBox x:Name="NavigatorCombobox" Margin=" 0 0 0 10">
+                    <ComboBoxItem x:Name="UserComboBoxItem" Selected="userListBoxItem_OnSelected">Theo từng user</ComboBoxItem>
                     <ComboBoxItem Selected="tagsListBoxItem_OnSelected">Theo từng Hashtag</ComboBoxItem>
                     <ComboBoxItem Selected="postListBoxItem_OnSelected">Theo từng bài đăng</ComboBoxItem>
                 </ComboBox>

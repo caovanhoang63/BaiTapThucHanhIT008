@@ -46,11 +46,13 @@ namespace InstagramAutoTool.View
             _userPage = new FeatureOnUser(this);
             _postPage = new FeatureOnAPost(this);
             _tagsPage = new FeatureOnTags(this);
-            
-            FeatureFrame.Navigate(_userPage);
+
+
+            UserComboBoxItem.IsSelected = true;
 
         }
-
+        
+ 
 
         private void TimerOnTick(Object sender, EventArgs e)
         {
@@ -65,6 +67,36 @@ namespace InstagramAutoTool.View
             }
 
         }
+        
+        private void StopButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource?.Cancel();
+            _selenium.Stop();
+            _timer.Stop();
+        }
+
+        #region Navigator
+
+        private void userListBoxItem_OnSelected(object sender, RoutedEventArgs e)
+        {
+            FeatureFrame.Navigate(_userPage);
+        }
+
+        private void tagsListBoxItem_OnSelected(object sender, RoutedEventArgs e)
+        {
+            FeatureFrame.Navigate(_tagsPage);
+
+        }
+
+        private void postListBoxItem_OnSelected(object sender, RoutedEventArgs e)
+        {
+            FeatureFrame.Navigate(_postPage);
+        }
+
+
+        #endregion
+
+        #region Login
 
         public bool Login(string username = null,string password = null)
         {
@@ -84,63 +116,26 @@ namespace InstagramAutoTool.View
                 return false;
             }
         }
-        
-        
-        
-        
-        private void StopButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            _cancellationTokenSource?.Cancel();
-            _selenium.Stop();
-            _timer.Stop();
-        }
-
-        private void UserName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void userListBoxItem_OnSelected(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                FeatureFrame.Navigate(_userPage);
-
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-            }
-        }
 
 
-        private void tagsListBoxItem_OnSelected(object sender, RoutedEventArgs e)
-        {
-            FeatureFrame.Navigate(_tagsPage);
+        #region Handles input accounts
 
-        }
-
-        private void postListBoxItem_OnSelected(object sender, RoutedEventArgs e)
-        {
-            FeatureFrame.Navigate(_postPage);
-        }
-
-        private FlowDocument _document;
-        
+         private FlowDocument _document;
         private void MultiAccount_OnChecked(object sender, RoutedEventArgs e)
         {
             UserName.IsEnabled = false;
             Password.IsEnabled = false;
-
             ImportTextDialog dialog;
             
-            
+            //check for dialog is opened before
             if (_document != null)
             {
+                //create with cache
                 dialog = new ImportTextDialog(_document);
             }
             else
             {
+                //If the dialog box hasn't been opened before, create a new dialog box
                 dialog = new ImportTextDialog();
             }
             
@@ -165,7 +160,7 @@ namespace InstagramAutoTool.View
                 }
                 _listAccount.Add(new Pair<string, string>(acount[0],acount[1]));
             }
-
+            //cache text in richtextbox of dialog
             _document = dialog.Document;
         }
 
@@ -186,5 +181,13 @@ namespace InstagramAutoTool.View
             }
             return true;
         }
+
+        #endregion
+       
+
+        #endregion
+
+
+      
     }
 }
