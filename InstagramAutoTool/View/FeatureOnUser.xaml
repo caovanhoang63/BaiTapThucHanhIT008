@@ -19,13 +19,14 @@
             <StackPanel Margin=" 0 10 ">
                 <StackPanel Orientation="Horizontal">
                     <Label >Tài khoản đích: </Label>
-                    <TextBox Text="zoro" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
+                    <TextBox  Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
                              Width="250"></TextBox>
                 </StackPanel>
-  
-                <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
+
+                <ToggleButton x:Name="MultiUsers" Width="250"  Margin="55 5 0 0" Unchecked="MultiUsers_Unchecked" Checked="MultiUsers_Checked" 
+                              >
                     Dùng nhiều tài khoản
-                </Button>
+                </ToggleButton>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label Margin="0 0 20 0">Số bài viết: </Label>
                     <TextBox  Name="PostNum" Style="{DynamicResource BaseTextBox}"

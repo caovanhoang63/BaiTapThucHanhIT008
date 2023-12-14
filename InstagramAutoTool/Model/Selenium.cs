@@ -159,8 +159,12 @@ namespace InstagramAutoTool.Model
         /// <param name="userDest"></param>
         /// <param name="listFunc"></param>
         /// <param name="comment"></param>
+        /// 
+
+        
         public async Task RunBuff(string userDest,int limit,bool[] listFunc , string comment = null)
         {
+             
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
 
             if (listFunc[1])
@@ -196,7 +200,7 @@ namespace InstagramAutoTool.Model
                 count++;
 
             
-                if (limit != -1 && count > limit)
+                if (limit != -1 && count >limit)
                     return;
             }
             
@@ -206,6 +210,8 @@ namespace InstagramAutoTool.Model
         /// RunCraw
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
+        /// 
+      
         public async Task RunCraw(string userDest,int limit ,bool[] listFunc, string folderPath)
         {
 

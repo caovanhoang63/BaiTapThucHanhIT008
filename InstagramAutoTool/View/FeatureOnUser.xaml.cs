@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using InstagramAutoTool.Model;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using CheckBox = System.Windows.Controls.CheckBox;
 using MessageBox = System.Windows.MessageBox;
 
@@ -15,9 +17,12 @@ namespace InstagramAutoTool.View
     public partial class FeatureOnUser : Page
     {
         private MainWindow _mainWindow;
+        private List<string> _listUsers;
+        public List<string> ListUsers => _listUsers;
         public FeatureOnUser(MainWindow mainWindow)
         {
             InitializeComponent();
+            _listUsers = new List<string>();
             this._mainWindow = mainWindow;
         }
         
@@ -28,7 +33,11 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
                 return;
             }
-            
+           if (!CheckHaveUserDest())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản đích");
+                return ;
+            }    
             _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = {false,false,false} ;
             string comment = string.Empty;
@@ -63,8 +72,16 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn chức năng");
                 return;
             }
-            
-            foreach(var account in _mainWindow.ListAccount)
+            if (PostNum.Text == "" && UnlimitPostNum.IsChecked==false )
+            {
+                MessageBox.Show("Vui lòng chọn số lượng bài viết");
+                return;
+            }
+            int x = _mainWindow.ListAccount.Count;
+            MessageBox.Show(x.ToString());
+            int y = ListUsers.Count;
+            MessageBox.Show(y.ToString());
+            foreach (var account in _mainWindow.ListAccount)
             { 
                 if (!_mainWindow.Login(account.First,account.Second))
                 {
@@ -72,21 +89,34 @@ namespace InstagramAutoTool.View
                     _mainWindow.Selenium.Stop();
                     continue;
                 }
+
+
                 await Task.Delay(4000);
                 int limit = 0;
-                
-                if (PostNum.IsEnabled)
-                    limit = int.Parse(PostNum.Text);
+               
+                 
+                 if (PostNum.IsEnabled)
+                      limit = int.Parse(PostNum.Text);
                 else
-                    limit = -1;
+                      limit = -1;
+               
                 
+                // à không mình phải sửa vòng lặp từ ngoài này mới đúng chứ , hàm RunBuff vẫn chạy cho từng user , có đều là mình sẽ chạy nhiều hàm RunBuff 
                 if (listFunc[2])
                 {
-                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc, comment);
+                    foreach(var user in ListUsers )
+                    {
+                        await _mainWindow.Selenium.RunBuff(user, limit, listFunc, comment);
+
+                    }
                 }
                 else 
-                    await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc);
-                
+                    foreach(var user in ListUsers)
+                    {
+                        await _mainWindow.Selenium.RunBuff(user, limit, listFunc);
+
+                    }
+
                 _mainWindow.Selenium.Stop();
                 _mainWindow.StopButton.IsEnabled = false;
             }
@@ -168,5 +198,59 @@ namespace InstagramAutoTool.View
             PostNum.IsEnabled =true;
 
         }
+        private FlowDocument _document;
+        private void MultiUsers_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UserNameDest.IsEnabled = false;
+             
+            ImportMultiUsersDialog dialog;
+
+            //check for dialog is opened before
+            if (_document != null)
+            {
+                //create with cache
+                dialog = new ImportMultiUsersDialog(_document);
+            }
+            else
+            {
+                //If the dialog box hasn't been opened before, create a new dialog box
+                dialog = new ImportMultiUsersDialog();
+            }
+
+            if (dialog.ShowDialog() != true)
+            {
+                UserNameDest.IsEnabled = true;
+                
+                MultiUsers.IsChecked = false;
+                return;
+            }
+            _listUsers.Clear();
+            foreach (var line in dialog.Lines)
+            {
+                
+                _listUsers.Add(line);
+            }
+            //cache text in richtextbox of dialog
+            _document = dialog.Document;
+        }
+
+        private void MultiUsers_Checked(object sender, RoutedEventArgs e)
+        {
+
+            UserNameDest.IsEnabled = true;
+             
+            _listUsers.Clear();
+        }
+        public bool CheckHaveUserDest()
+        {
+            if (UserNameDest.Text == String.Empty && _listUsers.Count == 0)
+                return false;
+            if (MultiUsers.IsChecked != true)
+            {
+                _listUsers.Add(UserNameDest.Text);
+            }
+            return true;
+        }
+
     }
 }
