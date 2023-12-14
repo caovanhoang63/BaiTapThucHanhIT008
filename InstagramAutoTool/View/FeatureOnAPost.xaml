@@ -17,7 +17,7 @@
         <StackPanel Orientation="Horizontal">
             <Label >Link bài viết: </Label>
             <TextBox Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
-                     Width="250"></TextBox>
+                     Width="250" Text="https://www.instagram.com/p/CqXV-5ts9C1/"></TextBox>
         </StackPanel>
   
         <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
@@ -29,9 +29,9 @@
             <StackPanel x:Name="BuffCheckList" 
                         Style="{DynamicResource CheckListContainer}" >
                 <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
-                <CheckBox Name="Like">Auto like</CheckBox>
+                <CheckBox Name="Like" Checked="Like_Checked">Auto like</CheckBox>
                 <CheckBox Name="Comment">Auto comment</CheckBox>
-                <Button >Chạy buff</Button>
+                <Button Click="RunBuffByLink_Click" >Chạy buff</Button>
             </StackPanel>
             
             <StackPanel x:Name="CrawlerCheckList" Margin="20 0 0 0 "
@@ -40,7 +40,7 @@
                 <Label Margin="0 0 0 20">	● Crawler:</Label>
                 <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
                 <CheckBox Name="DownloadComment">Download comment</CheckBox>
-                <Button  >Chạy Crawler</Button>
+                <Button Click="DownloadByLink_Click"  >Chạy Crawler</Button>
             </StackPanel>
         </StackPanel>
         

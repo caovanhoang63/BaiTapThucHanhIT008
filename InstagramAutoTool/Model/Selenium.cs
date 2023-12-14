@@ -201,6 +201,30 @@ namespace InstagramAutoTool.Model
             }
             
         }
+        public async Task RunBuffAPost(string url, bool[] listFunc, string comment = null)
+        {
+            _driver.Navigate().GoToUrl(url);
+            int count = 1;
+            while (true)
+            {
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return;
+
+                if (listFunc[0])
+                {
+                    await (Post.LikePostByLink(_driver, _runingHelper));
+                }
+
+                if (listFunc[1])
+                {
+                    await Post.CommentPost(_driver, _runingHelper, comment);
+                }
+                count++;
+
+
+            }
+
+        }
 
         /// <summary>
         /// RunCraw
@@ -251,8 +275,40 @@ namespace InstagramAutoTool.Model
                
         }
 
-        
-        
+        public async Task RunCrawAPost(string url, bool[] listFunc, string folderPath)
+        {
+
+            _driver.Navigate().GoToUrl(url);
+            // function dow all images
+            List<string> link = new List<string>();
+
+            string userNameFolder = folderPath + "\\" + url;
+
+            if (!Directory.Exists(userNameFolder))
+            {
+                Directory.CreateDirectory(userNameFolder);
+            }
+            await Task.Delay(300);
+
+            int count = 1;
+            while (true)
+            {
+                string postFolder = userNameFolder + "\\" + "post_" + count;
+
+                if (!Directory.Exists(postFolder))
+                    Directory.CreateDirectory(postFolder);
+
+                if (listFunc[0])
+                    await Post.DownLoadAllImage(_driver, postFolder, url);
+                if (listFunc[1])
+                    await Post.DownLoadAllComment(_driver, postFolder, url);
+                count++;
+            }
+
+
+        }
+
+
         public async Task RunCrawByHashTag(string hashTag,int limit ,bool[] listFunc, string folderPath)
         {
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + hashTag);

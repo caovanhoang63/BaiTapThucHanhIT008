@@ -41,7 +41,6 @@ namespace InstagramAutoTool.Model
             }
         }
 
-
         /// <summary>
         /// Auto LikePost
         /// </summary>
@@ -51,6 +50,27 @@ namespace InstagramAutoTool.Model
             {
                 await Task.Delay(300);
                 var likeContainer = _driver.FindElement(By.XPath("//span[@class='_aamw']"));
+                var likeButton = likeContainer.FindElement(By.TagName("div"));
+                var label = likeButton.FindElement(By.TagName("svg"));
+                await Task.Delay(300);
+                if (label.GetAttribute("aria-label") == "Like")
+                {
+                    likeButton.Click();
+                    _runingHelper.Like += 1;
+                }
+                await Task.Delay(300);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Liked");
+            }
+        }
+        public static async Task LikePostByLink(IWebDriver _driver, RuningHelper _runingHelper)
+        {
+            try
+            {
+                await Task.Delay(300);
+                var likeContainer = _driver.FindElement(By.XPath("//span[@class='xp7jhwk']"));
                 var likeButton = likeContainer.FindElement(By.TagName("div"));
                 var label = likeButton.FindElement(By.TagName("svg"));
                 await Task.Delay(300);
@@ -125,6 +145,56 @@ namespace InstagramAutoTool.Model
             }
         }
 
+        public static async Task DownLoadAllImageAPost(IWebDriver _driver, string folderPath, string userDest)
+        {
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
+            HashSet<string> links = new HashSet<string>();
+            Console.WriteLine("Done");
+
+            IWebElement container;
+            try
+            {
+
+                container = _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+            }
+            catch
+            {
+                container = _driver.FindElement(By.XPath("//div[contains(@class, '_aagv')"));
+            }
+            do
+            {
+                try
+                {
+                    var imgs = container.FindElements(By.TagName("img"));
+                    foreach (var img in imgs)
+                    {
+                        links.Add(img.GetAttribute("src"));
+                        Console.WriteLine("Done1");
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
+            } while (await NavigateToNextImage(container));
+
+            Console.WriteLine("Done");
+            using (WebClient webClient = new WebClient())
+            {
+                int i = 1;
+                foreach (var link in links)
+                {
+                    Console.WriteLine(link);
+                    await Task.Run(() =>
+                    {
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" + userDest + "_" + i + ".jpg");
+                        Console.WriteLine(i);
+                    });
+                    i++;
+                }
+            }
+        }
 
         private static async Task<bool> NavigateToNextImage(IWebElement container)
         {

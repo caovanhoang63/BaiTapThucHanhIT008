@@ -15,6 +15,7 @@ namespace InstagramAutoTool.View
     public partial class FeatureOnUser : Page
     {
         private MainWindow _mainWindow;
+        private Timer _timer;
         public FeatureOnUser(MainWindow mainWindow)
         {
             InitializeComponent();
@@ -23,9 +24,11 @@ namespace InstagramAutoTool.View
         
         private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _mainWindow.StartTimer();
             if (!_mainWindow.CheckHaveUserAccount())
             {
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                _mainWindow.StopTimer();
                 return;
             }
             
@@ -63,12 +66,12 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn chức năng");
                 return;
             }
-            
-            foreach(var account in _mainWindow.ListAccount)
+            foreach (var account in _mainWindow.ListAccount)
             { 
                 if (!_mainWindow.Login(account.First,account.Second))
                 {
                     MessageBox.Show("Đăng nhập không thành công!");
+                    _mainWindow.StopTimer();
                     _mainWindow.Selenium.Stop();
                     continue;
                 }
@@ -79,7 +82,6 @@ namespace InstagramAutoTool.View
                     limit = int.Parse(PostNum.Text);
                 else
                     limit = -1;
-                
                 if (listFunc[2])
                 {
                     await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc, comment);
@@ -88,6 +90,7 @@ namespace InstagramAutoTool.View
                     await  _mainWindow.Selenium.RunBuff(UserNameDest.Text,limit ,listFunc);
                 
                 _mainWindow.Selenium.Stop();
+                _mainWindow.StopTimer();
                 _mainWindow.StopButton.IsEnabled = false;
             }
         }
@@ -168,5 +171,6 @@ namespace InstagramAutoTool.View
             PostNum.IsEnabled =true;
 
         }
+        
     }
 }
