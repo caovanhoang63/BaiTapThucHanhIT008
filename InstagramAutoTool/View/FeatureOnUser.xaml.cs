@@ -245,7 +245,7 @@ namespace InstagramAutoTool.View
         {
             if (UserNameDest.Text == String.Empty && _listUsers.Count == 0)
                 return false;
-            if (MultiUsers.IsChecked != true)
+            if (MultiUsers.IsChecked != true && _listUsers.Count==0)
             {
                 _listUsers.Add(UserNameDest.Text);
             }

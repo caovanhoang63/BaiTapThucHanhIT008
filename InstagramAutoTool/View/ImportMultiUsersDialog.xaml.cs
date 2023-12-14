@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace InstagramAutoTool.View
 {
@@ -46,12 +47,18 @@ namespace InstagramAutoTool.View
         }
 
 
-        private void okButton_Click(object sender, RoutedEventArgs e)
+        private void okButton_Click(object sender, RoutedEventArgs e )
         {
+            
             string richText = new TextRange(RichTextBox.Document.ContentStart, RichTextBox.Document.ContentEnd).Text;
-
+            
             _lines =  richText.Trim().Split('\n');
-
+            if(richText.Length <= 2)
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản đích");
+                
+            }
+            MessageBox.Show(richText);
             DialogResult = true;
         }
 
