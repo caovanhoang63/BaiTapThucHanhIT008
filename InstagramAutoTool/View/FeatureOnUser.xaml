@@ -19,7 +19,7 @@
             <StackPanel Margin=" 0 10 ">
                 <StackPanel Orientation="Horizontal">
                     <Label >Tài khoản đích: </Label>
-                    <TextBox Text="_amnothing__" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
+                    <TextBox Text="zoro" Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
                              Width="250"></TextBox>
                 </StackPanel>
   
