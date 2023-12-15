@@ -17,19 +17,19 @@
         <StackPanel Orientation="Horizontal">
             <Label >Link bài viết: </Label>
             <TextBox Name="UserNameDest" Style="{DynamicResource BaseTextBox}"
-                     Width="250" Text="https://www.instagram.com/p/CqXV-5ts9C1/"></TextBox>
+                     Width="250" Text="https://www.instagram.com/p/C01UKT8vm1g/"></TextBox>
         </StackPanel>
-  
-        <Button Style="{DynamicResource LinkButtonStyle}" Margin="0 10 0 0">
+
+        <ToggleButton x:Name="MultiPost" Margin="0 10 0 0" Unchecked="MultiPost_Unchecked" Checked="MultiPost_Checked">
             Nhiều bài viết
-        </Button>
+        </ToggleButton>
         <Separator Margin="0 10"></Separator>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             
             <StackPanel x:Name="BuffCheckList" 
                         Style="{DynamicResource CheckListContainer}" >
                 <Label Margin="0 0 0 20">	● Buff tương tác:</Label>
-                <CheckBox Name="Like" Checked="Like_Checked">Auto like</CheckBox>
+                <CheckBox Name="Like">Auto like</CheckBox>
                 <CheckBox Name="Comment">Auto comment</CheckBox>
                 <Button Click="RunBuffByLink_Click" >Chạy buff</Button>
             </StackPanel>

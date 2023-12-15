@@ -221,7 +221,7 @@ namespace InstagramAutoTool.Model
                 }
                 count++;
 
-
+                return;
             }
 
         }
@@ -230,14 +230,14 @@ namespace InstagramAutoTool.Model
         /// RunCraw
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task RunCraw(string userDest,int limit ,bool[] listFunc, string folderPath)
+        public async Task RunCraw(string userDest, int limit, bool[] listFunc, string folderPath)
         {
 
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + userDest + "/");
             // function dow all images
             List<string> link = new List<string>();
 
-            string userNameFolder = folderPath + "\\"+ userDest;
+            string userNameFolder = folderPath + "\\" + userDest;
 
             if (!Directory.Exists(userNameFolder))
             {
@@ -252,14 +252,14 @@ namespace InstagramAutoTool.Model
             int count = 1;
             while (true)
             {
-                string postFolder = userNameFolder + "\\" +"post_" + count;
-            
+                string postFolder = userNameFolder + "\\" + "post_" + count;
+
                 if (!Directory.Exists(postFolder))
                     Directory.CreateDirectory(postFolder);
-            
+
                 if (listFunc[0])
                     await Post.DownLoadAllImage(_driver, postFolder, userDest);
-                if(listFunc[1])
+                if (listFunc[1])
                     await Post.DownLoadAllComment(_driver, postFolder, userDest);
 
                 postLink = await NavigateToNextPost();
@@ -272,17 +272,17 @@ namespace InstagramAutoTool.Model
                     return;
             }
 
-               
+
         }
 
-        public async Task RunCrawAPost(string url, bool[] listFunc, string folderPath)
-        {
 
+        public async Task RunCrawAPost(string url, bool[] listFunc, string folderPath,int postnum)
+        {
             _driver.Navigate().GoToUrl(url);
             // function dow all images
             List<string> link = new List<string>();
 
-            string userNameFolder = folderPath + "\\" + url;
+            string userNameFolder = folderPath + "\\" + "Img";
 
             if (!Directory.Exists(userNameFolder))
             {
@@ -290,19 +290,18 @@ namespace InstagramAutoTool.Model
             }
             await Task.Delay(300);
 
-            int count = 1;
             while (true)
             {
-                string postFolder = userNameFolder + "\\" + "post_" + count;
+                string postFolder = userNameFolder + "\\" + "post_"+postnum.ToString() ;
 
                 if (!Directory.Exists(postFolder))
                     Directory.CreateDirectory(postFolder);
 
                 if (listFunc[0])
-                    await Post.DownLoadAllImage(_driver, postFolder, url);
+                    await Post.DownLoadAllImageAPost(_driver, postFolder, url);
                 if (listFunc[1])
                     await Post.DownLoadAllComment(_driver, postFolder, url);
-                count++;
+                return;
             }
 
 

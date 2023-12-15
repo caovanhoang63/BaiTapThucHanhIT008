@@ -188,7 +188,7 @@ namespace InstagramAutoTool.Model
                     Console.WriteLine(link);
                     await Task.Run(() =>
                     {
-                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" + userDest + "_" + i + ".jpg");
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" +i+ "_" + i + ".jpg");
                         Console.WriteLine(i);
                     });
                     i++;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using InstagramAutoTool.Model;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -15,9 +16,12 @@ namespace InstagramAutoTool.View
     public partial class FeatureOnAPost : Page
     {
         private MainWindow _mainWindow;
+        private List<string> _listPost;
+        public List<string> ListPost => _listPost;
         public FeatureOnAPost(MainWindow mainWindow)
         {
             InitializeComponent();
+            _listPost = new List<string>();
             this._mainWindow = mainWindow;
         }
 
@@ -28,10 +32,19 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
                 return;
             }
+            if(!CheckPostLink())
+            {
+                MessageBox.Show("Vui lòng nhập link bài post");
+                return;
+            }
             _mainWindow.StartTimer();
             _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = { false, false };
             string comment = string.Empty;
+
+            int y = ListPost.Count;
+            MessageBox.Show(y.ToString());
+
             foreach (var child in BuffCheckList.Children)
             {
                 if (child is CheckBox cb)
@@ -75,10 +88,16 @@ namespace InstagramAutoTool.View
 
                 if (listFunc[1])
                 {
-                    await _mainWindow.Selenium.RunBuffAPost(UserNameDest.Text, listFunc, comment);
+                    foreach(var post in ListPost) 
+                    {
+                        await _mainWindow.Selenium.RunBuffAPost(post, listFunc, comment);
+                    }
                 }
                 else
-                    await _mainWindow.Selenium.RunBuffAPost(UserNameDest.Text, listFunc);
+                    foreach (var post in ListPost)
+                    {
+                        await _mainWindow.Selenium.RunBuffAPost(post, listFunc);
+                    }
                 _mainWindow.StopTimer();
                 _mainWindow.Selenium.Stop();
                 _mainWindow.StopButton.IsEnabled = false;
@@ -87,10 +106,6 @@ namespace InstagramAutoTool.View
 
         }
 
-        private void Like_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
         private async void DownloadByLink_Click(object sender, RoutedEventArgs e)
         {
             if (!_mainWindow.CheckHaveUserAccount())
@@ -98,6 +113,8 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
                 return;
             }
+            _mainWindow.StartTimer();
+            _mainWindow.StopButton.IsEnabled = true;
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
@@ -131,26 +148,79 @@ namespace InstagramAutoTool.View
                 return;
             }
             //  Console.WriteLine("Run");
-            if (!_mainWindow.Login())
+            int i = 1;
+            foreach (var post in ListPost)
             {
-                MessageBox.Show("Đăng nhập không thành công!");
+                if (!_mainWindow.Login())
+                {
+                    MessageBox.Show("Đăng nhập không thành công!");
+                }
+                else
+                {
+                    await Task.Delay(4000);
+                    try
+                    {
+                        await _mainWindow.Selenium.RunCrawAPost(post, listFunc, folderPath,i);
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
+                    _mainWindow.Selenium.Stop();
+                    _mainWindow.StopTimer();
+                    _mainWindow.StopButton.IsEnabled = false;
+
+                }
+                i++;
             }
-            else
+
+        }
+
+        private FlowDocument _document;
+
+        private void MultiPost_Checked(object sender, RoutedEventArgs e)
+        {
+            UserNameDest.IsEnabled = false;
+            _listPost.Clear();
+        }
+        private void MultiPost_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UserNameDest.IsEnabled = false;
+            ImportMultiPost dialog;
+            //Check dialog opened before
+            if (_document != null)
             {
-                await Task.Delay(4000);
-                try
-                {
-                    await _mainWindow.Selenium.RunCrawAPost(UserNameDest.Text, listFunc, folderPath);
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                }
-                _mainWindow.Selenium.Stop();
-                _mainWindow.StopButton.IsEnabled = false;
-
+                //Create with document
+                dialog = new ImportMultiPost(_document);
+            }
+            else 
+            {
+                //Create new 
+                dialog = new ImportMultiPost();
             }
 
+            if(dialog.ShowDialog()!= true)
+            { 
+                UserNameDest.IsEnabled = true;
+                MultiPost.IsChecked = false;
+                return;
+            }
+            _listPost.Clear();
+            foreach(var line in dialog.Lines)
+            {
+                _listPost.Add(line);
+            }
+            _document = dialog.Document;
+        }
+        public bool CheckPostLink()
+        {
+            if (UserNameDest.Text == String.Empty && _listPost.Count == 0)
+                return false;
+            if (MultiPost.IsChecked != true && _listPost.Count == 0)
+            {
+                _listPost.Add(UserNameDest.Text);
+            }
+            return true;
         }
 
     }
