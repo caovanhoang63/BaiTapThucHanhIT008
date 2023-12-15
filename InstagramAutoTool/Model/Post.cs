@@ -142,7 +142,7 @@ namespace InstagramAutoTool.Model
             }
         }
 
-        public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath, string userDest)
+        public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath)
         {
             List<string> comments = new List<string>(); 
             try
@@ -185,7 +185,7 @@ namespace InstagramAutoTool.Model
                 {
                     await Task.Run(() =>
                     {
-                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                        File.WriteAllLines(folderPath + "\\" + "comments" + ".txt", comments);
                     });
                 }
                 catch (Exception ex)
@@ -198,6 +198,34 @@ namespace InstagramAutoTool.Model
             {
                 Console.WriteLine(e);
             }
+            
+        }
+
+        public static string GetDescription(IWebDriver _driver)
+        {
+            try
+            {
+                string descriptionElement =
+                    _driver.FindElement(By.XPath("//h1[@class='_ap3a _aaco _aacu _aacx _aad7 _aade']")).Text;
+                return descriptionElement;
+
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static async Task DownloadDescription(IWebDriver _driver, string folderPath)
+        {
+            string description = GetDescription(_driver);
+            if (description == null)
+                return;
+            
+            await Task.Run(() =>
+            {
+                File.WriteAllText(folderPath + "\\" + "description" + ".txt", description);
+            });
             
         }
     }

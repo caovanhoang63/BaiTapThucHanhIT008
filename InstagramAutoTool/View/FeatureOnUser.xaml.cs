@@ -20,6 +20,11 @@ namespace InstagramAutoTool.View
             InitializeComponent();
             this._mainWindow = mainWindow;
         }
+
+        public FeatureOnUser()
+        {
+            InitializeComponent();
+        }
         
         private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -166,7 +171,6 @@ namespace InstagramAutoTool.View
         private void UnlimitedPostNum_UnChecked(object sender, RoutedEventArgs e)
         {
             PostNum.IsEnabled =true;
-
         }
     }
 }

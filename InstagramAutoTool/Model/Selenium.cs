@@ -236,7 +236,7 @@ namespace InstagramAutoTool.Model
                 if (listFunc[0])
                     await Post.DownLoadAllImage(_driver, postFolder, userDest);
                 if(listFunc[1])
-                    await Post.DownLoadAllComment(_driver, postFolder, userDest);
+                    await Post.DownLoadAllComment(_driver, postFolder);
 
                 postLink = await NavigateToNextPost();
                 if (postLink == prevLink)
@@ -253,47 +253,72 @@ namespace InstagramAutoTool.Model
 
         
         
-        public async Task RunCrawByHashTag(string hashTag,int limit ,bool[] listFunc, string folderPath)
+        public async Task RunCrawByHashTag(List<string> listHashTag,int limit ,bool[] listFunc, string folderPath)
         {
-            _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + hashTag);
+            _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + listHashTag[0]);
             
             // function dow all images
             List<string> Link = new List<string>();
 
-            string userNameFolder = folderPath + "\\"+ hashTag;
+            string userNameFolder = folderPath + "\\"+ listHashTag[0];
 
             if (!Directory.Exists(userNameFolder))
             {
                 Directory.CreateDirectory(userNameFolder);
             }
+            
             string postLink;
             string prevLink = string.Empty;
             await Task.Delay(300);
 
             User.CLickToFirstPost(_driver, _cancellationTokenSource);
+            
             await Task.Delay(500);
             int count = 1;
             while (true)
             {
                 string postFolder = userNameFolder + "\\" +"post_" + count;
+                
                 if (!Directory.Exists(postFolder))
-                {
                     Directory.CreateDirectory(postFolder);
-                }
-                if (listFunc[0])
-                {
-                    await Post.DownLoadAllImage(_driver, postFolder, "");
-                }
-                if(listFunc[1])
-                {
-                    await Post.DownLoadAllComment(_driver, postFolder, "");
-                }    
 
+                string description = Post.GetDescription(_driver);
+
+                
+                bool flag = true;
+                
+                foreach (var hashtag in listHashTag)
+                {
+                    if (!description.Contains("#" + hashtag))
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                if (flag)
+                {
+                    //Run functions
+                    if (listFunc[0])
+                        await Post.DownLoadAllImage(_driver, postFolder, "");
+                        
+                    if(listFunc[1])
+                        await Post.DownLoadAllComment(_driver, postFolder);
+
+                    if (listFunc[2])
+                        await Post.DownloadDescription(_driver, postFolder);
+  
+                         
+                    count++;
+                }
+                
                 postLink = await NavigateToNextPost();
                 if (postLink == prevLink)
-                    return;
+                {
+                    _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + listHashTag[0]);
+                    User.CLickToFirstPost(_driver, _cancellationTokenSource);
+                }
                 prevLink = postLink;
-                count++;
                 if (limit != -1 && count > limit)
                     return;
             }
@@ -321,7 +346,6 @@ namespace InstagramAutoTool.Model
             }
             return Task.FromResult(link);
         }
-        
         
     }
     

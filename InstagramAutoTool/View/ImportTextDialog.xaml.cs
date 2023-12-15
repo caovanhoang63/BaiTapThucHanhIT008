@@ -53,19 +53,19 @@ namespace InstagramAutoTool.View
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "File|*.txt;...";
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() != true)
+                return;
+
+            if (!openFileDialog.CheckPathExists)
+                return;
+            
+            RichTextBox.Document.Blocks.Clear();
+            using (StreamReader streamReader = new StreamReader(openFileDialog.FileName))
             {
-                if (openFileDialog.CheckPathExists)
+                string line;
+                while ( (line =  streamReader.ReadLine()) != null)
                 {
-                    RichTextBox.Document.Blocks.Clear();
-                    using (StreamReader streamReader = new StreamReader(openFileDialog.FileName))
-                    {
-                        string line;
-                        while ( (line =  streamReader.ReadLine()) != null)
-                        {
-                            RichTextBox.Document.Blocks.Add( new Paragraph(new Run(line)));
-                        }
-                    }
+                    RichTextBox.Document.Blocks.Add( new Paragraph(new Run(line)));
                 }
             }
         }
