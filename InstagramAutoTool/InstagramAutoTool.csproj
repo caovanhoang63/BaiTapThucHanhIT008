@@ -132,6 +132,9 @@
     <Compile Include="View\FeatureOnUser.xaml.cs">
       <DependentUpon>FeatureOnUser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ImportMultiUsersDialog.xaml.cs">
+      <DependentUpon>ImportMultiUsersDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ImportTextDialog.xaml.cs">
       <DependentUpon>ImportTextDialog.xaml</DependentUpon>
     </Compile>
@@ -164,6 +167,10 @@
     <Page Include="View\FeatureOnAPost.xaml" />
     <Page Include="View\FeatureOnTags.xaml" />
     <Page Include="View\FeatureOnUser.xaml" />
+    <Page Include="View\ImportMultiUsersDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ImportTextDialog.xaml" />
     <Page Include="View\MainWindow.xaml" />
   </ItemGroup>
