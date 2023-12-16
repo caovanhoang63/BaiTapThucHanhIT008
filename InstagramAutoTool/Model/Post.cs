@@ -5,11 +5,13 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Markup;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using static InstagramAutoTool.View.MainWindow;
 
 namespace InstagramAutoTool.Model
 {
@@ -51,6 +53,27 @@ namespace InstagramAutoTool.Model
             {
                 await Task.Delay(300);
                 var likeContainer = _driver.FindElement(By.XPath("//span[@class='_aamw']"));
+                var likeButton = likeContainer.FindElement(By.TagName("div"));
+                var label = likeButton.FindElement(By.TagName("svg"));
+                await Task.Delay(300);
+                if (label.GetAttribute("aria-label") == "Like")
+                {
+                    likeButton.Click();
+                    _runingHelper.Like += 1;
+                }
+                await Task.Delay(300);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Liked");
+            }
+        }
+        public static async Task LikePostByLink(IWebDriver _driver, RuningHelper _runingHelper)
+        {
+            try
+            {
+                await Task.Delay(300);
+                var likeContainer = _driver.FindElement(By.XPath("//span[@class='xp7jhwk']"));
                 var likeButton = likeContainer.FindElement(By.TagName("div"));
                 var label = likeButton.FindElement(By.TagName("svg"));
                 await Task.Delay(300);
@@ -125,6 +148,58 @@ namespace InstagramAutoTool.Model
             }
         }
 
+        public static async Task DownLoadAllImageByLink(IWebDriver _driver, string folderPath,string userDest, RuningHelper _runingHelper)
+        {
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
+            HashSet<string> links = new HashSet<string>();
+            Console.WriteLine("Done");
+
+            IWebElement container;
+            try
+            {
+
+                container = _driver.FindElement(By.XPath("//div[@class='x1lliihq xh8yej3']"));
+            }
+            catch
+            {
+                container = _driver.FindElement(By.XPath("//div[contains(@class, '_aagv')"));
+            }
+            do
+            {
+                try
+                {
+                    var imgs = container.FindElements(By.TagName("img"));
+                    foreach (var img in imgs)
+                    {
+                        links.Add(img.GetAttribute("src"));
+                        Console.WriteLine("Done1");
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
+            } while (await NavigateToNextImage(container));
+
+            int index = 1;
+
+            Console.WriteLine("Done");
+            using (WebClient webClient = new WebClient())
+            {
+                int i = 1;
+                    foreach (var link in links)
+                {
+                    await Task.Run(() =>
+                    {
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
+                        _runingHelper.ImageDownload+=1;
+                        Console.WriteLine(i);
+                    });
+                    i++;
+                }
+            }
+        }
 
         private static async Task<bool> NavigateToNextImage(IWebElement container)
         {
@@ -185,7 +260,7 @@ namespace InstagramAutoTool.Model
                 {
                     await Task.Run(() =>
                     {
-                        File.WriteAllLines(folderPath + "\\" + "comments" + ".txt", comments);
+                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
                     });
                 }
                 catch (Exception ex)
@@ -228,5 +303,61 @@ namespace InstagramAutoTool.Model
             });
             
         }
+
+        public static async Task DownLoadAllCommentByLink(IWebDriver _driver, string folderPath, string userDest)
+        {
+            List<string> comments = new List<string>();
+            try
+            {
+                IWebElement Container = _driver.FindElement(By.XPath("//ul[@class='x5yr21d xw2csxc x1odjw0f x1n2onr6']"));
+                await Task.Delay(1000);
+                // load comment 
+                while (true)
+                {
+                    try
+                    {
+                        _driver.FindElement(By.XPath("/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div[3]/div/div/li/div/button")).Click();
+                        await Task.Delay(500);
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
+                // get element contain comment 
+                ReadOnlyCollection<IWebElement> commentSpans = Container.FindElements(By.XPath("" +
+                    "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']"));
+                await Task.Delay(1000);
+
+                // get element contain username
+                ReadOnlyCollection<IWebElement> username = Container.FindElements(By.XPath("" + "//a[@class='_ap3a _aaco _aacw _aacx _aad7 _aade']"));
+                await Task.Delay(1000);
+
+
+                for (int i = 0; i < commentSpans.Count; i++)
+
+                {
+                    comments.Add(username[i + 1].Text + ": " + commentSpans[i].Text);
+                }
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi lưu dữ liệu vào tệp tin: {ex.Message}");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

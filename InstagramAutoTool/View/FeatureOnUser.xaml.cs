@@ -19,6 +19,7 @@ namespace InstagramAutoTool.View
         private MainWindow _mainWindow;
         private List<string> _listUsers;
         public List<string> ListUsers => _listUsers;
+        private Timer _timer;
         public FeatureOnUser(MainWindow mainWindow)
         {
             InitializeComponent();
@@ -33,9 +34,11 @@ namespace InstagramAutoTool.View
         
         private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _mainWindow.StartTimer();
             if (!_mainWindow.CheckHaveUserAccount())
             {
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                _mainWindow.StopTimer();
                 return;
             }
            if (!CheckHaveUserDest())
@@ -91,6 +94,7 @@ namespace InstagramAutoTool.View
                 if (!_mainWindow.Login(account.First,account.Second))
                 {
                     MessageBox.Show("Đăng nhập không thành công!");
+                    _mainWindow.StopTimer();
                     _mainWindow.Selenium.Stop();
                     continue;
                 }
@@ -123,15 +127,18 @@ namespace InstagramAutoTool.View
                     }
 
                 _mainWindow.Selenium.Stop();
+                _mainWindow.StopTimer();
                 _mainWindow.StopButton.IsEnabled = false;
             }
         }
         
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _mainWindow.StartTimer();
             if (!_mainWindow.CheckHaveUserAccount())
             {
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                _mainWindow.StopTimer();
                 return;
             }
             
@@ -170,6 +177,7 @@ namespace InstagramAutoTool.View
             if (!_mainWindow.Login())
             {
                 MessageBox.Show("Đăng nhập không thành công!");
+                _mainWindow.StopTimer();
             }
             else
             {
@@ -187,6 +195,7 @@ namespace InstagramAutoTool.View
                 {
                     Console.WriteLine(exception);
                 }
+                _mainWindow.StopTimer();
                 _mainWindow.Selenium.Stop();
                 _mainWindow.StopButton.IsEnabled = false;
 

@@ -9,12 +9,14 @@
         private int _commentDownload;
         private int _imageDownload;
         
-        public RuningHelper(int follow, int like, int comment, int second)
+        public RuningHelper(int follow, int like, int comment, int second, int commentdownload, int imagedownload)
         {
             _follow = follow;
             _like = like;
             _comment = comment;
             _second = second;
+            _commentDownload = commentdownload;
+            _imageDownload = imagedownload;
         }
 
         

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Dynamic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 using InstagramAutoTool.Model;
 using Microsoft.Win32;
+using static InstagramAutoTool.View.MainWindow;
 using CheckBox = System.Windows.Controls.CheckBox;
 using MessageBox = System.Windows.MessageBox;
 using RichTextBox = System.Windows.Forms.RichTextBox;
@@ -27,6 +30,7 @@ namespace InstagramAutoTool.View
         private FeatureOnUser _userPage;
         private FeatureOnAPost _postPage;
         private FeatureOnTags _tagsPage;
+        private RuningHelper _runingHelper; 
         private List<Pair<string, string>> _listAccount;
         public Selenium Selenium => _selenium;
         public List<Pair<string, string>> ListAccount => _listAccount;
@@ -36,18 +40,18 @@ namespace InstagramAutoTool.View
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
             _listAccount = new List<Pair<string, string>>();
-            
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1),
-            };
-            _timer.Tick += TimerOnTick;
 
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += TimerOnTick;
+            _runingHelper = new RuningHelper();
+            RunningInforStackPanel.DataContext = _runingHelper;
+            
             _userPage = new FeatureOnUser(this);
             _postPage = new FeatureOnAPost(this);
             _tagsPage = new FeatureOnTags(this);
 
-
+            
             UserComboBoxItem.IsSelected = true;
 
         }
@@ -56,23 +60,32 @@ namespace InstagramAutoTool.View
 
         private void TimerOnTick(Object sender, EventArgs e)
         {
+                _runingHelper.Second += 1;
             try
             {
-                RunningInforStackPanel.DataContext = _selenium.RuningHelper;
-                // Console.WriteLine(_selenium.RuningHelper.Like);
+                if (_selenium != null && _selenium.RuningHelper!=null)
+                {
+                    _runingHelper.Like = _selenium.RuningHelper.Like;
+                    _runingHelper.Follow = _selenium.RuningHelper.Follow;
+                    _runingHelper.Comment = _selenium.RuningHelper.Comment;
+                    _runingHelper.CommentDownload = _selenium.RuningHelper.CommentDownload;
+                    _runingHelper.ImageDownload = _selenium.RuningHelper.ImageDownload;
+                }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
             }
 
+
         }
-        
+
         private void StopButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _runingHelper.Second = 0;
             _cancellationTokenSource?.Cancel();
-            _selenium.Stop();
             _timer.Stop();
+            _selenium.Stop();
         }
 
         #region Navigator
@@ -183,11 +196,89 @@ namespace InstagramAutoTool.View
         }
 
         #endregion
-       
+
 
         #endregion
 
+        public class RuningHelper : INotifyPropertyChanged
+        {
+            private int _second;
+            private int _like;
+            private int _comment;
+            private int _follow;
+            private int _commentdownload;
+            private int _imagedownload;
+            public int Second
+            {
+                get { return _second; }
+                set
+                {
+                    _second = value;
+                    OnPropertyChanged("Second");
+                }
+            }
+            public int Like
+            {
+                get { return _like; }
+                set
+                {
+                    _like = value;
+                    OnPropertyChanged("Like");
+                }
+            }
 
-      
+            public int Comment
+            {
+                get { return _comment; }
+                set
+                {
+                    _comment = value;
+                    OnPropertyChanged("Comment");
+                }
+            }
+            public int Follow
+            {
+                get { return _follow; }
+                set
+                {
+                    _follow = value;
+                    OnPropertyChanged("Follow");
+                }
+            }
+            public int CommentDownload
+            {
+                get { return _imagedownload; }
+                set
+                {
+                    _commentdownload = value;
+                    OnPropertyChanged("CommentDownload");
+                }
+            }
+            public int ImageDownload
+            {
+                get { return _imagedownload; }
+                set
+                {
+                    _imagedownload = value;
+                    OnPropertyChanged("ImageDownload");
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public void StartTimer()
+        {
+            _timer.Start();
+        }
+        public void StopTimer() 
+        {
+            _timer.Stop();
+        }
     }
 }
