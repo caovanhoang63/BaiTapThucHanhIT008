@@ -298,9 +298,9 @@ namespace InstagramAutoTool.Model
                     Directory.CreateDirectory(postFolder);
 
                 if (listFunc[0])
-                    await Post.DownLoadAllImageAPost(_driver, postFolder, url);
+                    await Post.DownLoadAllImageByLink(_driver, postFolder, url);
                 if (listFunc[1])
-                    await Post.DownLoadAllComment(_driver, postFolder, url);
+                    await Post.DownLoadAllCommentByLink(_driver, postFolder, url);
                 return;
             }
 

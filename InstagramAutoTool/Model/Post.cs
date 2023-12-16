@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Markup;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -145,7 +146,7 @@ namespace InstagramAutoTool.Model
             }
         }
 
-        public static async Task DownLoadAllImageAPost(IWebDriver _driver, string folderPath, string userDest)
+        public static async Task DownLoadAllImageByLink(IWebDriver _driver, string folderPath,string userDest)
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
@@ -155,7 +156,7 @@ namespace InstagramAutoTool.Model
             try
             {
 
-                container = _driver.FindElement(By.XPath("//div[@class='_aamn']"));
+                container = _driver.FindElement(By.XPath("//div[@class='x1lliihq xh8yej3']"));
             }
             catch
             {
@@ -179,16 +180,17 @@ namespace InstagramAutoTool.Model
 
             } while (await NavigateToNextImage(container));
 
+            int index = 1;
+
             Console.WriteLine("Done");
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
-                foreach (var link in links)
+                    foreach (var link in links)
                 {
-                    Console.WriteLine(link);
                     await Task.Run(() =>
                     {
-                        webClient.DownloadFile(new Uri(link), folderPath + "\\_" +i+ "_" + i + ".jpg");
+                        webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
                         Console.WriteLine(i);
                     });
                     i++;
@@ -270,5 +272,61 @@ namespace InstagramAutoTool.Model
             }
             
         }
+
+        public static async Task DownLoadAllCommentByLink(IWebDriver _driver, string folderPath, string userDest)
+        {
+            List<string> comments = new List<string>();
+            try
+            {
+                IWebElement Container = _driver.FindElement(By.XPath("//ul[@class='x5yr21d xw2csxc x1odjw0f x1n2onr6']"));
+                await Task.Delay(1000);
+                // load comment 
+                while (true)
+                {
+                    try
+                    {
+                        _driver.FindElement(By.XPath("/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div[3]/div/div/li/div/button")).Click();
+                        await Task.Delay(500);
+                    }
+                    catch
+                    {
+                        break;
+                    }
+                }
+                // get element contain comment 
+                ReadOnlyCollection<IWebElement> commentSpans = Container.FindElements(By.XPath("" +
+                    "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']"));
+                await Task.Delay(1000);
+
+                // get element contain username
+                ReadOnlyCollection<IWebElement> username = Container.FindElements(By.XPath("" + "//a[@class='_ap3a _aaco _aacw _aacx _aad7 _aade']"));
+                await Task.Delay(1000);
+
+
+                for (int i = 0; i < commentSpans.Count; i++)
+
+                {
+                    comments.Add(username[i + 1].Text + ": " + commentSpans[i].Text);
+                }
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi lưu dữ liệu vào tệp tin: {ex.Message}");
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
     }
 }

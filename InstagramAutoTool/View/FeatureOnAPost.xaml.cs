@@ -74,6 +74,7 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn chức năng");
                 _mainWindow.StopTimer();
                 return;
+
             }
             foreach (var account in _mainWindow.ListAccount)
             {
@@ -98,12 +99,10 @@ namespace InstagramAutoTool.View
                     {
                         await _mainWindow.Selenium.RunBuffAPost(post, listFunc);
                     }
-                _mainWindow.StopTimer();
-                _mainWindow.Selenium.Stop();
-                _mainWindow.StopButton.IsEnabled = false;
             }
-
-
+            _mainWindow.StopTimer();
+            _mainWindow.Selenium.Stop();
+            _mainWindow.StopButton.IsEnabled = false;
         }
 
         private async void DownloadByLink_Click(object sender, RoutedEventArgs e)
@@ -113,6 +112,12 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
                 return;
             }
+            if (!CheckPostLink())
+            {
+                MessageBox.Show("Vui lòng nhập link bài post");
+                return;
+            }
+
             _mainWindow.StartTimer();
             _mainWindow.StopButton.IsEnabled = true;
 
