@@ -97,9 +97,11 @@ namespace InstagramAutoTool.View
         
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
+            _mainWindow.StartTimer();
             if (!_mainWindow.CheckHaveUserAccount())
             {
                 MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                _mainWindow.StopTimer();
                 return;
             }
             
@@ -138,6 +140,7 @@ namespace InstagramAutoTool.View
             if (!_mainWindow.Login())
             {
                 MessageBox.Show("Đăng nhập không thành công!");
+                _mainWindow.StopTimer();
             }
             else
             {
@@ -155,6 +158,7 @@ namespace InstagramAutoTool.View
                 {
                     Console.WriteLine(exception);
                 }
+                _mainWindow.StopTimer();
                 _mainWindow.Selenium.Stop();
                 _mainWindow.StopButton.IsEnabled = false;
 

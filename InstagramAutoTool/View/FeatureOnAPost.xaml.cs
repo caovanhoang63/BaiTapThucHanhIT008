@@ -171,13 +171,13 @@ namespace InstagramAutoTool.View
                     {
                         Console.WriteLine(exception);
                     }
-                    _mainWindow.Selenium.Stop();
-                    _mainWindow.StopTimer();
-                    _mainWindow.StopButton.IsEnabled = false;
 
                 }
                 i++;
+                _mainWindow.Selenium.Stop();
             }
+            _mainWindow.StopTimer();
+            _mainWindow.StopButton.IsEnabled = false;
 
         }
 

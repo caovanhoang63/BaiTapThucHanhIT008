@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Dynamic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,20 +40,18 @@ namespace InstagramAutoTool.View
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
             _listAccount = new List<Pair<string, string>>();
-            
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1),
-            };
+
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += TimerOnTick;
             _runingHelper = new RuningHelper();
             RunningInforStackPanel.DataContext = _runingHelper;
-
+            
             _userPage = new FeatureOnUser(this);
             _postPage = new FeatureOnAPost(this);
             _tagsPage = new FeatureOnTags(this);
 
-
+            
             UserComboBoxItem.IsSelected = true;
 
         }
@@ -69,6 +68,8 @@ namespace InstagramAutoTool.View
                     _runingHelper.Like = _selenium.RuningHelper.Like;
                     _runingHelper.Follow = _selenium.RuningHelper.Follow;
                     _runingHelper.Comment = _selenium.RuningHelper.Comment;
+                    _runingHelper.CommentDownload = _selenium.RuningHelper.CommentDownload;
+                    _runingHelper.ImageDownload = _selenium.RuningHelper.ImageDownload;
                 }
             }
             catch (Exception exception)
@@ -205,7 +206,8 @@ namespace InstagramAutoTool.View
             private int _like;
             private int _comment;
             private int _follow;
-
+            private int _commentdownload;
+            private int _imagedownload;
             public int Second
             {
                 get { return _second; }
@@ -241,6 +243,24 @@ namespace InstagramAutoTool.View
                 {
                     _follow = value;
                     OnPropertyChanged("Follow");
+                }
+            }
+            public int CommentDownload
+            {
+                get { return _imagedownload; }
+                set
+                {
+                    _commentdownload = value;
+                    OnPropertyChanged("CommentDownload");
+                }
+            }
+            public int ImageDownload
+            {
+                get { return _imagedownload; }
+                set
+                {
+                    _imagedownload = value;
+                    OnPropertyChanged("ImageDownload");
                 }
             }
 

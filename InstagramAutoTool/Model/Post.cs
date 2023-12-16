@@ -11,6 +11,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using static InstagramAutoTool.View.MainWindow;
 
 namespace InstagramAutoTool.Model
 {
@@ -95,7 +96,7 @@ namespace InstagramAutoTool.Model
         /// <param name="_driver"></param>
         /// <param name="folderPath"></param>
         /// <param name="userDest"></param>
-        public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest)
+        public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest, RuningHelper _runingHelper)
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
@@ -139,6 +140,7 @@ namespace InstagramAutoTool.Model
                     await Task.Run(() =>
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
+                        _runingHelper.ImageDownload+=1;
                         Console.WriteLine(i);
                     });
                     i++;
@@ -146,7 +148,7 @@ namespace InstagramAutoTool.Model
             }
         }
 
-        public static async Task DownLoadAllImageByLink(IWebDriver _driver, string folderPath,string userDest)
+        public static async Task DownLoadAllImageByLink(IWebDriver _driver, string folderPath,string userDest, RuningHelper _runingHelper)
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
@@ -191,6 +193,7 @@ namespace InstagramAutoTool.Model
                     await Task.Run(() =>
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
+                        _runingHelper.ImageDownload+=1;
                         Console.WriteLine(i);
                     });
                     i++;
@@ -222,7 +225,7 @@ namespace InstagramAutoTool.Model
                 IWebElement  Container = _driver.FindElement(By.XPath("//ul[@class='_a9z6 _a9za']"));
                 await Task.Delay(1000);
 
-                // load comment 
+                //load comment
                 while (true)
                 {
                     try
