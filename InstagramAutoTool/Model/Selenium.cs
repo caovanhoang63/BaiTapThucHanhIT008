@@ -293,25 +293,22 @@ namespace InstagramAutoTool.Model
             }
             await Task.Delay(300);
 
-            while (true)
-            {
-                string postFolder = userNameFolder + "\\" + "post_"+postnum.ToString() ;
+            string postFolder = userNameFolder + "\\" + "post_" + postnum.ToString();
 
-                if (!Directory.Exists(postFolder))
-                    Directory.CreateDirectory(postFolder);
+            if (!Directory.Exists(postFolder))
+                Directory.CreateDirectory(postFolder);
 
-                if (listFunc[0])
-                    await Post.DownLoadAllImageByLink(_driver, postFolder, url, _runingHelper);
-                if (listFunc[1])
-                    await Post.DownLoadAllCommentByLink(_driver, postFolder, url, _runingHelper);
-                return;
-            }
+            if (listFunc[0])
+                await Post.DownLoadAllImageByLink(_driver, postFolder, url, _runingHelper);
+            if (listFunc[1])
+                await Post.DownLoadAllCommentByLink(_driver, postFolder, url, _runingHelper);
+            return;
 
-               
+
         }
 
-        
-        
+
+
         public async Task RunCrawByHashTag(List<string> listHashTag,int limit ,bool[] listFunc, string folderPath)
         {
             _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + listHashTag[0]);
