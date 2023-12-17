@@ -7,8 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
-using InstagramAutoTool.Model;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using CheckBox = System.Windows.Controls.CheckBox;
 using MessageBox = System.Windows.MessageBox;
 
@@ -41,11 +39,12 @@ namespace InstagramAutoTool.View
                 _mainWindow.StopTimer();
                 return;
             }
-           if (!CheckHaveUserDest())
+            if (!CheckHaveUserDest())
             {
                 MessageBox.Show("Vui lòng nhập tài khoản đích");
                 return ;
             }    
+            
             _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = {false,false,false} ;
             string comment = string.Empty;

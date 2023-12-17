@@ -185,12 +185,12 @@ namespace InstagramAutoTool.View
 
         private void MultiPost_Checked(object sender, RoutedEventArgs e)
         {
-            UserNameDest.IsEnabled = false;
+            LinkPost.IsEnabled = false;
             _listPost.Clear();
         }
         private void MultiPost_Unchecked(object sender, RoutedEventArgs e)
         {
-            UserNameDest.IsEnabled = false;
+            LinkPost.IsEnabled = false;
             ImportMultiPost dialog;
             //Check dialog opened before
             if (_document != null)
@@ -206,7 +206,7 @@ namespace InstagramAutoTool.View
 
             if(dialog.ShowDialog()!= true)
             { 
-                UserNameDest.IsEnabled = true;
+                LinkPost.IsEnabled = true;
                 MultiPost.IsChecked = false;
                 return;
             }
@@ -219,11 +219,12 @@ namespace InstagramAutoTool.View
         }
         public bool CheckPostLink()
         {
-            if (UserNameDest.Text == String.Empty && _listPost.Count == 0)
+            if (LinkPost.Text == String.Empty && _listPost.Count == 0)
                 return false;
-            if (MultiPost.IsChecked != true && _listPost.Count == 0)
+            if (MultiPost.IsChecked != true)
             {
-                _listPost.Add(UserNameDest.Text);
+                _listPost.Clear();
+                _listPost.Add(LinkPost.Text);
             }
             return true;
         }

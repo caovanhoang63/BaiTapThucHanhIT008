@@ -28,11 +28,11 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <Label>Tài khoản: </Label>
-                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}" Text="huydq58422@gmail.com"></TextBox>
+                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}" ></TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label >Mật khẩu:</Label>
-                    <PasswordBox  Name="Password" Style="{DynamicResource BasePasswordBox}" Password="huy582004" ></PasswordBox>
+                    <PasswordBox  Name="Password" Style="{DynamicResource BasePasswordBox}"  ></PasswordBox>
                 </StackPanel>
                 <ToggleButton x:Name="MultiAccount" Checked="MultiAccount_OnChecked" 
                               Unchecked="MultiAccount_OnUnChecked">

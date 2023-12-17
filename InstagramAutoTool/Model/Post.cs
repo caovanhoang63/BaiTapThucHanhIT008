@@ -309,52 +309,58 @@ namespace InstagramAutoTool.Model
             List<string> comments = new List<string>();
             try
             {
-                IWebElement Container = _driver.FindElement(By.XPath("//ul[@class='x5yr21d xw2csxc x1odjw0f x1n2onr6']"));
-                await Task.Delay(1000);
-                // load comment 
+                IWebElement scrollDiv =
+                    _driver.FindElement(By.CssSelector("div.x5yr21d.xw2csxc.x1odjw0f.x1n2onr6"));
+                IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)_driver;
+
+                
+                
+                
+                int x = 2000;
+                int curCount = scrollDiv.FindElements(By.XPath(
+                    "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']")).Count;
+
+                int count = curCount;
                 while (true)
                 {
-                    try
-                    {
-                        _driver.FindElement(By.XPath("/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/div[3]/div/div/li/div/button")).Click();
-                        await Task.Delay(500);
-                    }
-                    catch
-                    {
+                    javaScriptExecutor.ExecuteScript("arguments[0].scroll(0,arguments[1])",
+                        scrollDiv,x);
+
+                    Thread.Sleep(2000);
+                    
+                    curCount = scrollDiv.FindElements(By.XPath(
+                        "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']")).Count;
+
+                    
+                    if (count == curCount)
                         break;
-                    }
+                    count = curCount;
+                    x += 2000;
                 }
-                // get element contain comment 
-                ReadOnlyCollection<IWebElement> commentSpans = Container.FindElements(By.XPath("" +
+
+
+                var list = scrollDiv.FindElements(By.XPath(
                     "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']"));
-                await Task.Delay(1000);
 
-                // get element contain username
-                ReadOnlyCollection<IWebElement> username = Container.FindElements(By.XPath("" + "//a[@class='_ap3a _aaco _aacw _aacx _aad7 _aade']"));
-                await Task.Delay(1000);
-
-
-                for (int i = 0; i < commentSpans.Count; i++)
-
+                for (int i = 1; i < list.Count -1; i+=2)
                 {
-                    comments.Add(username[i + 1].Text + ": " + commentSpans[i].Text);
+                    comments.Add(list[i].Text + ":" + list[i+1].Text);
                 }
+                
                 try
                 {
                     await Task.Run(() =>
                     {
-                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                        File.WriteAllLines(folderPath + "\\" + "comments" + ".txt", comments);
                     });
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Lỗi khi lưu dữ liệu vào tệp tin: {ex.Message}");
                 }
-
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
             }
 
         }
