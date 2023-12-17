@@ -57,7 +57,7 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập link post");
 
             }
-            MessageBox.Show(richText);
+            //MessageBox.Show(richText);
             DialogResult = true;
 
         }

@@ -155,13 +155,11 @@ namespace InstagramAutoTool.View
             //  Console.WriteLine("Run");
             int i = 1;
 
-            foreach (var post in _listPost)
-            { MessageBox.Show(post); }
-
-                if (!_mainWindow.Login())
+            if (!_mainWindow.Login())
             {
                 MessageBox.Show("Đăng nhập không thành công!");
             }
+
             else
             {
                 foreach (var post in _listPost)
