@@ -182,22 +182,21 @@ namespace InstagramAutoTool.Model
 
             } while (await NavigateToNextImage(container));
 
-            int index = 1;
-
             Console.WriteLine("Done");
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
-                    foreach (var link in links)
+                foreach (var link in links)
                 {
                     await Task.Run(() =>
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
-                        _runingHelper.ImageDownload+=1;
+                        _runingHelper.ImageDownload += 1;
                         Console.WriteLine(i);
                     });
                     i++;
                 }
+
             }
         }
 

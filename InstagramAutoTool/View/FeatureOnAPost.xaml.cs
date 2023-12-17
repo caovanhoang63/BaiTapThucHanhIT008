@@ -89,13 +89,13 @@ namespace InstagramAutoTool.View
 
                 if (listFunc[1])
                 {
-                    foreach(var post in ListPost) 
+                    foreach(var post in _listPost) 
                     {
                         await _mainWindow.Selenium.RunBuffAPost(post, listFunc, comment);
                     }
                 }
                 else
-                    foreach (var post in ListPost)
+                    foreach (var post in _listPost)
                     {
                         await _mainWindow.Selenium.RunBuffAPost(post, listFunc);
                     }
@@ -154,41 +154,41 @@ namespace InstagramAutoTool.View
             }
             //  Console.WriteLine("Run");
             int i = 1;
-            foreach (var post in ListPost)
-            {
+
+            foreach (var post in _listPost)
+            { MessageBox.Show(post); }
+
                 if (!_mainWindow.Login())
-                {
-                    MessageBox.Show("Đăng nhập không thành công!");
-                }
-                else
+            {
+                MessageBox.Show("Đăng nhập không thành công!");
+            }
+            else
+            {
+                foreach (var post in _listPost)
                 {
                     await Task.Delay(4000);
                     try
                     {
-                        await _mainWindow.Selenium.RunCrawAPost(post, listFunc, folderPath,i);
+                        await _mainWindow.Selenium.RunCrawAPost(post, listFunc, folderPath, i);
                     }
                     catch (Exception exception)
                     {
                         Console.WriteLine(exception);
                     }
 
-                }
-                i++;
-                _mainWindow.Selenium.Stop();
-            }
-            _mainWindow.StopTimer();
-            _mainWindow.StopButton.IsEnabled = false;
+                    i++;
 
+                }
+                _mainWindow.Selenium.Stop();
+                _mainWindow.StopTimer();
+                _mainWindow.StopButton.IsEnabled = false;
+
+            }
         }
 
         private FlowDocument _document;
 
         private void MultiPost_Checked(object sender, RoutedEventArgs e)
-        {
-            LinkPost.IsEnabled = false;
-            _listPost.Clear();
-        }
-        private void MultiPost_Unchecked(object sender, RoutedEventArgs e)
         {
             LinkPost.IsEnabled = false;
             ImportMultiPost dialog;
@@ -198,24 +198,30 @@ namespace InstagramAutoTool.View
                 //Create with document
                 dialog = new ImportMultiPost(_document);
             }
-            else 
+            else
             {
                 //Create new 
                 dialog = new ImportMultiPost();
             }
 
-            if(dialog.ShowDialog()!= true)
-            { 
+            if (dialog.ShowDialog() != true)
+            {
                 LinkPost.IsEnabled = true;
                 MultiPost.IsChecked = false;
                 return;
             }
             _listPost.Clear();
-            foreach(var line in dialog.Lines)
+            foreach (var line in dialog.Lines)
             {
                 _listPost.Add(line);
             }
             _document = dialog.Document;
+
+        }
+        private void MultiPost_Unchecked(object sender, RoutedEventArgs e)
+        {
+            LinkPost.IsEnabled = true;
+            _listPost.Clear();
         }
         public bool CheckPostLink()
         {

@@ -282,13 +282,10 @@ namespace InstagramAutoTool.Model
         }
 
 
-        public async Task RunCrawAPost(string url, bool[] listFunc, string folderPath,int postnum)
+        public async Task RunCrawAPost(string url, bool[] listFunc, string folderPath, int postnum)
         {
             _driver.Navigate().GoToUrl(url);
-            // function dow all images
-            List<string> link = new List<string>();
-
-            string userNameFolder = folderPath + "\\" + "Img";
+            string userNameFolder = folderPath + "\\" + "Img_Download";
 
             if (!Directory.Exists(userNameFolder))
             {
