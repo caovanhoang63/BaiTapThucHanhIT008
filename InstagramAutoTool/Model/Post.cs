@@ -97,7 +97,7 @@ namespace InstagramAutoTool.Model
         /// <param name="_driver"></param>
         /// <param name="folderPath"></param>
         /// <param name="userDest"></param>
-        public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest)
+        public static async Task DownLoadAllImage(IWebDriver _driver, string folderPath, string userDest, RuningHelper _runingHelper)
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
@@ -141,6 +141,7 @@ namespace InstagramAutoTool.Model
                     await Task.Run(() =>
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
+                        _runingHelper.ImageDownload+=1;
                         Console.WriteLine(i);
                     });
                     i++;
@@ -216,7 +217,7 @@ namespace InstagramAutoTool.Model
             }
         }
 
-        public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath)
+        public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath, RuningHelper _runingHelper)
         {
             List<string> comments = new List<string>(); 
             try
@@ -254,6 +255,7 @@ namespace InstagramAutoTool.Model
 
                 {
                     comments.Add( username[i+1].Text +": " +commentSpans[i].Text);
+                    _runingHelper.CommentDownload+=1;
                 }
                 try
                 {
@@ -303,7 +305,7 @@ namespace InstagramAutoTool.Model
             
         }
 
-        public static async Task DownLoadAllCommentByLink(IWebDriver _driver, string folderPath, string userDest)
+        public static async Task DownLoadAllCommentByLink(IWebDriver _driver, string folderPath, string userDest, RuningHelper _runingHelper)
         {
             List<string> comments = new List<string>();
             try
@@ -344,6 +346,7 @@ namespace InstagramAutoTool.Model
                 for (int i = 1; i < list.Count -1; i+=2)
                 {
                     comments.Add(list[i].Text + ":" + list[i+1].Text);
+                    _runingHelper.CommentDownload += 1;
                 }
                 
                 try

@@ -264,9 +264,9 @@ namespace InstagramAutoTool.Model
                     Directory.CreateDirectory(postFolder);
             
                 if (listFunc[0])
-                    await Post.DownLoadAllImage(_driver, postFolder, userDest);
+                    await Post.DownLoadAllImage(_driver, postFolder, userDest, _runingHelper);
                 if(listFunc[1])
-                    await Post.DownLoadAllComment(_driver, postFolder);
+                    await Post.DownLoadAllComment(_driver, postFolder, _runingHelper);
 
                 postLink = await NavigateToNextPost();
                 if (postLink == prevLink)
@@ -303,7 +303,7 @@ namespace InstagramAutoTool.Model
                 if (listFunc[0])
                     await Post.DownLoadAllImageByLink(_driver, postFolder, url, _runingHelper);
                 if (listFunc[1])
-                    await Post.DownLoadAllCommentByLink(_driver, postFolder, url);
+                    await Post.DownLoadAllCommentByLink(_driver, postFolder, url, _runingHelper);
                 return;
             }
 
@@ -359,10 +359,10 @@ namespace InstagramAutoTool.Model
                 {
                     //Run functions
                     if (listFunc[0])
-                        await Post.DownLoadAllImage(_driver, postFolder, "");
+                        await Post.DownLoadAllImage(_driver, postFolder, "", _runingHelper);
                         
                     if(listFunc[1])
-                        await Post.DownLoadAllComment(_driver, postFolder);
+                        await Post.DownLoadAllComment(_driver, postFolder, _runingHelper);
 
                     if (listFunc[2])
                         await Post.DownloadDescription(_driver, postFolder);

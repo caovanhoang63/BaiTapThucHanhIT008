@@ -46,7 +46,7 @@ namespace InstagramAutoTool.View
             _timer.Tick += TimerOnTick;
             _runingHelper = new RuningHelper();
             RunningInforStackPanel.DataContext = _runingHelper;
-            
+
             _userPage = new FeatureOnUser(this);
             _postPage = new FeatureOnAPost(this);
             _tagsPage = new FeatureOnTags(this);
@@ -247,7 +247,7 @@ namespace InstagramAutoTool.View
             }
             public int CommentDownload
             {
-                get { return _imagedownload; }
+                get { return _commentdownload; }
                 set
                 {
                     _commentdownload = value;
@@ -274,10 +274,12 @@ namespace InstagramAutoTool.View
 
         public void StartTimer()
         {
+            _runingHelper.Second = 0;
             _timer.Start();
         }
-        public void StopTimer() 
+        public async void StopTimer() 
         {
+            await Task.Delay(1000);
             _timer.Stop();
         }
     }
