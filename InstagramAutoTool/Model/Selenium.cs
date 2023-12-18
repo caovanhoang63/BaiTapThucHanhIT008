@@ -207,31 +207,24 @@ namespace InstagramAutoTool.Model
         {
             try
             {
-                int count = 1;
-                while (true)
-                {
-                    if (_cancellationTokenSource.IsCancellationRequested)
-                        return;
-
-                    if (listFunc[0])
-                    {
-                        await (Post.LikePostByLink(_driver, _runingHelper));
-                    }
-
-                    if (listFunc[1])
-                    {
-                        await Post.CommentPost(_driver, _runingHelper, comment);
-                    }
-                    count++;
-
+                _driver.Navigate().GoToUrl(url);
+                if (_cancellationTokenSource.IsCancellationRequested)
                     return;
+
+                if (listFunc[0])
+                {
+                    await (Post.LikePostByLink(_driver, _runingHelper));
+                }
+
+                if (listFunc[1])
+                {
+                    await Post.CommentPost(_driver, _runingHelper, comment);
                 }
             }
             catch (Exception e)
             {   
                 ShowErrorMessageBox();
             }
-            _driver.Navigate().GoToUrl(url);
 
 
         }

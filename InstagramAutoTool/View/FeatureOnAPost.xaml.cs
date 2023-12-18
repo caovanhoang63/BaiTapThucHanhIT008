@@ -43,13 +43,9 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng nhập link bài post");
                 return;
             }
-            
-            
-            
 
             bool[] listFunc = { false, false };
             string comment = string.Empty;
-
 
             foreach (var child in BuffCheckList.Children)
             {
@@ -255,6 +251,11 @@ namespace InstagramAutoTool.View
             {
                 _listPost.Clear();
                 _listPost.Add(LinkPost.Text);
+            }
+
+            foreach (var link in _listPost)
+            {
+                Console.WriteLine(link);
             }
             return true;
         }
