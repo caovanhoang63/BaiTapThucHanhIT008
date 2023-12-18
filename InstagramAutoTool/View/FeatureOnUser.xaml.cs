@@ -99,6 +99,7 @@ namespace InstagramAutoTool.View
                     _mainWindow.Selenium.Stop();
                     continue;
                 }
+                
                 await Task.Delay(4000);
                 int limit = 0;
                
@@ -280,8 +281,9 @@ namespace InstagramAutoTool.View
         {
             if (UserNameDest.Text == String.Empty && _listUsers.Count == 0)
                 return false;
-            if (MultiUsers.IsChecked != true && _listUsers.Count==0)
+            if (MultiUsers.IsChecked != true )
             {
+                _listUsers.Clear();
                 _listUsers.Add(UserNameDest.Text);
             }
             return true;

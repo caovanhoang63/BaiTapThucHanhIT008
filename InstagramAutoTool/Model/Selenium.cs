@@ -329,7 +329,6 @@ namespace InstagramAutoTool.Model
                 _driver.Navigate().GoToUrl("https://www.instagram.com/" + "explore/tags" + "/" + listHashTag[0]);
             
                 // function dow all images
-                List<string> Link = new List<string>();
 
                 string userNameFolder = folderPath + "\\"+ listHashTag[0];
 
@@ -340,7 +339,7 @@ namespace InstagramAutoTool.Model
                 
                 string postLink;
                 string prevLink = string.Empty;
-                await Task.Delay(300);
+                await Task.Delay(500);
 
                 User.CLickToFirstPost(_driver, _cancellationTokenSource);
                 
@@ -360,13 +359,15 @@ namespace InstagramAutoTool.Model
                     
                     foreach (var hashtag in listHashTag)
                     {
-                        if (!description.Contains("#" + hashtag)  )
+                        if (!description.Contains("#" + hashtag.ToLower())  )
                         {
                             flag = false;
                             break;
                         }
                     }
 
+                    await Task.Delay(1000);
+                    
                     if (flag)
                     {
                         //Run functions
@@ -378,6 +379,7 @@ namespace InstagramAutoTool.Model
 
                         if (listFunc[2])
                             await Post.DownloadDescription(_driver, postFolder);
+
                         count++;
                     }
                     
@@ -388,9 +390,7 @@ namespace InstagramAutoTool.Model
                         User.CLickToFirstPost(_driver, _cancellationTokenSource);
                     }
                     
-                    
                     prevLink = postLink;
-                    count++;
                     if (limit != -1 && count > limit)
                         return;
                 }
