@@ -69,6 +69,12 @@ namespace InstagramAutoTool.Model
                 Console.WriteLine("Liked");
             }
         }
+        
+        /// <summary>
+        ///  Auto like a post 
+        /// </summary>
+        /// <param name="_driver"></param>
+        /// <param name="_runingHelper"></param>
         public static async Task LikePostByLink(IWebDriver _driver, RuningHelper _runingHelper)
         {
             try
@@ -143,7 +149,6 @@ namespace InstagramAutoTool.Model
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
-            Console.WriteLine("Done");
 
             IWebElement container;
             try
@@ -181,7 +186,6 @@ namespace InstagramAutoTool.Model
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
                         _runingHelper.ImageDownload += 1;
-                        Console.WriteLine(i);
                     });
                     i++;
                 }
@@ -198,7 +202,7 @@ namespace InstagramAutoTool.Model
             {
                 IWebElement  Container = _driver.FindElement(By.XPath("//ul[@class='_a9z6 _a9za']"));
                 await Task.Delay(1000);
-
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);        
                 // load comment 
                 while (true)
                 {
@@ -212,6 +216,7 @@ namespace InstagramAutoTool.Model
                         break;
                     }
                 }
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);        
                 // get element contain comment 
                 ReadOnlyCollection<IWebElement> commentSpans =  Container.FindElements(By.XPath("" +
                     "//span[@class='_ap3a _aaco _aacu _aacx _aad7 _aade']"));
@@ -246,7 +251,7 @@ namespace InstagramAutoTool.Model
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                throw e;
             }
             
         }
@@ -289,8 +294,6 @@ namespace InstagramAutoTool.Model
                 IJavaScriptExecutor javaScriptExecutor = (IJavaScriptExecutor)_driver;
 
                 
-                
-                
                 int x = 2000;
                 int curCount = scrollDiv.FindElements(By.XPath(
                     "//span[@class='x1lliihq x1plvlek xryxfnj x1n2onr6 x193iq5w xeuugli x1fj9vlw x13faqbe x1vvkbs x1s928wv xhkezso x1gmr53x x1cpjm7i x1fgarty x1943h6x x1i0vuye xvs91rp xo1l8bm x5n08af x10wh9bi x1wdrske x8viiok x18hxmgj']")).Count;
@@ -319,7 +322,7 @@ namespace InstagramAutoTool.Model
 
                 for (int i = 1; i < list.Count -1; i+=2)
                 {
-                    comments.Add(list[i].Text + ":" + list[i+1].Text);
+                    comments.Add(list[i].Text + ": " + list[i + 1].Text);
                     _runingHelper.CommentDownload += 1;
                 }
                 
@@ -342,18 +345,32 @@ namespace InstagramAutoTool.Model
         }
         
         
-        
+        /// <summary>
+        /// Clicks to next button on the image and switches to next image
+        /// </summary>
+        /// <param name="_driver"></param>
+        /// <param name="container">the image that contains next button</param>
+        /// <returns>
+        ///     returns true when success to switches to next image
+        /// </returns>
         private static async Task<bool> NavigateToNextImage(IWebDriver _driver ,IWebElement container)
         {
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(1));
             try
             {
-                wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@class=' _afxw _al46 _al47']"))).Click();
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
+                wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@class=' _afxw _al46 _al47']")))
+                    .Click();
                 return true;
             }
             catch (Exception e)
             {
                 return false;
+            }
+            finally
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
             }
         }
 

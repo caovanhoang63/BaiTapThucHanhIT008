@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:InstagramAutoTool.View"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="430" Width="700" ResizeMode="CanMinimize"
-        WindowStartupLocation="CenterScreen" 
+        Title="Instagram auto tool" Height="430" Width="700" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Icon="../Assets/Images/SeleniumAutoToolLogo.png"
         >
     
     <Window.Resources>
@@ -28,11 +29,11 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <Label>Tài khoản: </Label>
-                    <TextBox Name="UserName"  Style="{DynamicResource BaseTextBox}" />
+                    <TextBox Name="UserName" Text="useformycode" Style="{DynamicResource BaseTextBox}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label >Mật khẩu:</Label>
-                    <PasswordBox  Name="Password" Style="{DynamicResource BasePasswordBox}"  />
+                    <PasswordBox  Name="Password" Password="Hh12032004@" Style="{DynamicResource BasePasswordBox}"  />
                 </StackPanel>
                 <ToggleButton x:Name="MultiAccount" Checked="MultiAccount_OnChecked" 
                               Unchecked="MultiAccount_OnUnChecked">

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Input;
 using CheckBox = System.Windows.Controls.CheckBox;
 using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace InstagramAutoTool.View
 {
@@ -32,20 +34,6 @@ namespace InstagramAutoTool.View
         
         private async void RunBuffButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainWindow.StartTimer();
-            if (!_mainWindow.CheckHaveUserAccount())
-            {
-                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
-                _mainWindow.StopTimer();
-                return;
-            }
-            if (!CheckHaveUserDest())
-            {
-                MessageBox.Show("Vui lòng nhập tài khoản đích");
-                return ;
-            }    
-            
-            _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = {false,false,false} ;
             string comment = string.Empty;
             foreach (var child in BuffCheckList.Children)
@@ -74,6 +62,7 @@ namespace InstagramAutoTool.View
                 }
             }
             
+            //Check have enough input
             if (!listFunc.Contains(true))
             {
                 MessageBox.Show("Vui lòng chọn chức năng");
@@ -84,11 +73,28 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn số lượng bài viết");
                 return;
             }
+            
+            if (!_mainWindow.CheckHaveUserAccount())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                _mainWindow.StopTimer();
+                return;
+            }
+            if (!CheckHaveUserDest())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản đích");
+                return ;
+            }    
+            //end check
+            
+                        
+            _mainWindow.StartTimer();
+            _mainWindow.StopButton.IsEnabled = true;
+            
             foreach (var account in _mainWindow.ListAccount)
             { 
                 if (!_mainWindow.Login(account.First,account.Second))
                 {
-                    MessageBox.Show("Đăng nhập không thành công!");
                     _mainWindow.StopTimer();
                     _mainWindow.Selenium.Stop();
                     continue;
@@ -118,33 +124,17 @@ namespace InstagramAutoTool.View
 
                     }
 
-                _mainWindow.Selenium.Stop();
                 _mainWindow.StopTimer();
-                _mainWindow.StopButton.IsEnabled = false;
             }
+            _mainWindow.Selenium.Stop();
+            _mainWindow.StopButton.IsEnabled = false;
+
         }
         
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _mainWindow.StartTimer();
-            if (!_mainWindow.CheckHaveUserAccount())
-            {
-                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
-                _mainWindow.StopTimer();
-                return;
-            }
-            
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
 
-            var result = folderBrowserDialog.ShowDialog();
 
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-            
-            string folderPath = folderBrowserDialog.SelectedPath;
-            _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = { false, false };
             foreach (var child in CrawlerCheckList.Children)
             {
@@ -160,16 +150,56 @@ namespace InstagramAutoTool.View
                 }
             }
 
+            
+            //Check enough input
             if (!listFunc.Contains(true))
             {
                 MessageBox.Show("Vui lòng chọn chức năng");
                 return;
             }
+            
+            if (PostNum.Text == "" && UnlimitPostNum.IsChecked==false )
+            {
+                MessageBox.Show("Vui lòng chọn số lượng bài viết");
+                return;
+            }
+            
+            if (!CheckHaveUserDest())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản đích");
+                return ;
+            }    
+
+            if (!_mainWindow.CheckHaveUserAccount())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                return;
+            }
+            //end check
+            
+            //Chooses save folder
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+
+            var result = folderBrowserDialog.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+            
+            string folderPath = folderBrowserDialog.SelectedPath;
+            
+            
+            _mainWindow.StartTimer();
+            _mainWindow.StopButton.IsEnabled = true;
+
             //  Console.WriteLine("Run");
             if (!_mainWindow.Login())
             {
                 MessageBox.Show("Đăng nhập không thành công!");
+                _mainWindow.Selenium.Stop();
                 _mainWindow.StopTimer();
+                _mainWindow.StopButton.IsEnabled = false;
             }
             else
             {
@@ -201,25 +231,27 @@ namespace InstagramAutoTool.View
 
         private void UnlimitedPostNum_UnChecked(object sender, RoutedEventArgs e)
         {
-            PostNum.IsEnabled =true;
+            PostNum.IsEnabled = true;
         }
+        
+        
         private FlowDocument _document;
-        private void MultiUsers_Unchecked(object sender, RoutedEventArgs e)
+        private void MultiUsers_Checked(object sender, RoutedEventArgs e)
         {
             UserNameDest.IsEnabled = false;
              
-            ImportMultiUsersDialog dialog;
+            ImportTextDialog dialog;
 
             //check for dialog is opened before
             if (_document != null)
             {
                 //create with cache
-                dialog = new ImportMultiUsersDialog(_document);
+                dialog = new ImportTextDialog(_document);
             }
             else
             {
                 //If the dialog box hasn't been opened before, create a new dialog box
-                dialog = new ImportMultiUsersDialog();
+                dialog = new ImportTextDialog();
             }
 
             if (dialog.ShowDialog() != true)
@@ -239,14 +271,12 @@ namespace InstagramAutoTool.View
             _document = dialog.Document;
         }
 
-        private void MultiUsers_Checked(object sender, RoutedEventArgs e)
+        private void MultiUsers_Unchecked(object sender, RoutedEventArgs e)
         {
-
             UserNameDest.IsEnabled = true;
-             
             _listUsers.Clear();
         }
-        public bool CheckHaveUserDest()
+        private bool CheckHaveUserDest()
         {
             if (UserNameDest.Text == String.Empty && _listUsers.Count == 0)
                 return false;
@@ -256,6 +286,10 @@ namespace InstagramAutoTool.View
             }
             return true;
         }
-
+        private void PostNum_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
     }
 }

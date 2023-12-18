@@ -31,23 +31,10 @@
                     </ToggleButton>
                     <StackPanel Orientation="Horizontal" Margin="0 10">
                         <Label>Số bài viết: </Label>
-                        <TextBox  Name="PostNum" Style="{DynamicResource BaseTextBox}"
+                        <TextBox PreviewTextInput="PostNum_OnPreviewTextInput"  Name="PostNum" Style="{DynamicResource BaseTextBox}"
                                  Width="250"></TextBox>
                     </StackPanel>
                     
-                    <StackPanel Orientation="Horizontal" >
-                        <CheckBox Margin="2 0 0 0" VerticalAlignment="Center"
-                                  Content="Không giới hạn số lượng bài viết"
-                                  Checked="UnlimitedPostNum_OnChecked"
-                                  Unchecked="UnlimitedPostNum_UnChecked">
-                            <CheckBox.Resources>
-                                <Style TargetType="{x:Type Path}">
-                                    <Setter Property="FlowDirection" Value="LeftToRight" />
-                                </Style>
-                            </CheckBox.Resources>
-                        </CheckBox>
-                    </StackPanel>
-
                 </StackPanel>
             </Grid>
         
@@ -61,7 +48,6 @@
                     <CheckBox Name="DownloadImage">Download ảnh và video</CheckBox>
                     <CheckBox Name="DownloadComment">Download comment</CheckBox>
                     <CheckBox Name="DownloadDescription">Download mô tả</CheckBox>
-                    <CheckBox Name="DownloadTime">Download thời gian</CheckBox>
                     <Button Click="RunCrawlerButton_OnClick" >Chạy Crawler</Button>
                 </StackPanel>
             </StackPanel>

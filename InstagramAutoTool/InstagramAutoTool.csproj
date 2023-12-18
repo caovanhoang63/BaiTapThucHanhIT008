@@ -134,9 +134,6 @@
     <Compile Include="View\FeatureOnUser.xaml.cs">
       <DependentUpon>FeatureOnUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ImportMultiPost.xaml.cs">
-      <DependentUpon>ImportMultiPost.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ImportMultiUsersDialog.xaml.cs">
       <DependentUpon>ImportMultiUsersDialog.xaml</DependentUpon>
     </Compile>
@@ -174,10 +171,10 @@
     <Page Include="View\FeatureOnUser.xaml" />
     <Page Include="View\ImportTextDialog.xaml" />
     <Page Include="View\MainWindow.xaml" />
-    <Page Include="View\ImportMultiPost.xaml" />
     <Page Include="View\ImportMultiUsersDialog.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Images\SeleniumAutoToolLogo.png" />
     <Content Include="Assets\NetWork\ip.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -29,7 +29,7 @@
                 </ToggleButton>
                 <StackPanel Orientation="Horizontal" Margin="0 10">
                     <Label Margin="0 0 20 0">Số bài viết: </Label>
-                    <TextBox  Name="PostNum" Style="{DynamicResource BaseTextBox}"
+                    <TextBox PreviewTextInput="PostNum_OnPreviewTextInput"  Name="PostNum" Style="{DynamicResource BaseTextBox}"
                               Width="250"></TextBox>
                 </StackPanel>
                     

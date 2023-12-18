@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
+using System.Windows.Input;
 using CheckBox = System.Windows.Controls.CheckBox;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace InstagramAutoTool.View
 {
@@ -24,33 +29,14 @@ namespace InstagramAutoTool.View
             _listHashTags = new List<string>();
         }
 
+        
+        /// <summary>
+        /// Handles run craw button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
-            
-            if (!_mainWindow.CheckHaveUserAccount())
-            {
-                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
-                return;
-            }
-            
-            if (!CheckHaveHashTag())
-            {
-                MessageBox.Show("Vui lòng nhập các hashtag cần craw");
-                return;
-            }
-            
-            
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-
-            var result = folderBrowserDialog.ShowDialog();
-
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
-            string folderPath = folderBrowserDialog.SelectedPath;
-            _mainWindow.StopButton.IsEnabled = true;
             bool[] listFunc = { false, false,false };
             foreach (var child in CrawlerCheckList.Children)
             {
@@ -77,11 +63,38 @@ namespace InstagramAutoTool.View
             if (!_mainWindow.Login())
             {
                 MessageBox.Show("Đang nhập thất bại");
+                _mainWindow.Selenium.Stop();
                 return;
             }
             
+            if (!_mainWindow.CheckHaveUserAccount())
+            {
+                MessageBox.Show("Vui lòng nhập tài khoản của bạn");
+                return;
+            }
+            
+            if (!CheckHaveHashTag())
+            {
+                MessageBox.Show("Vui lòng nhập các hashtag cần craw");
+                return;
+            }
+            
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+
+            var result = folderBrowserDialog.ShowDialog();
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            string folderPath = folderBrowserDialog.SelectedPath;
+            
             await Task.Delay(4000);
 
+            _mainWindow.StopButton.IsEnabled = true;
+            
+            //run func
             try
             {
                 int limit = 0;
@@ -91,7 +104,6 @@ namespace InstagramAutoTool.View
                     limit = -1; 
                 await _mainWindow.Selenium.RunCrawByHashTag(_listHashTags, limit,listFunc, folderPath);
                 
-                
             }
             catch (Exception exception)
             {
@@ -100,10 +112,7 @@ namespace InstagramAutoTool.View
 
             _mainWindow.Selenium.Stop();
             _mainWindow.StopButton.IsEnabled = false;
-            
         }
-
-
 
         private FlowDocument _document;
         private void MultiHashTagToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
@@ -147,18 +156,6 @@ namespace InstagramAutoTool.View
         
         
         
-        //Limit number of post needs to craw
-        private void UnlimitedPostNum_OnChecked(object sender, RoutedEventArgs e)
-        {
-            PostNum.IsEnabled = false;
-        }
-
-        private void UnlimitedPostNum_UnChecked(object sender, RoutedEventArgs e)
-        {
-            PostNum.IsEnabled =true;
-        }
-        
-        
         private bool CheckHaveHashTag()
         {
             if (HashTagTextBox.Text == String.Empty && _listHashTags.Count == 0  )
@@ -172,7 +169,10 @@ namespace InstagramAutoTool.View
         }
 
 
-
-
+        private void PostNum_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+");
+        }
     }
 }
