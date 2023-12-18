@@ -286,6 +286,11 @@ namespace InstagramAutoTool.View
                 _listUsers.Clear();
                 _listUsers.Add(UserNameDest.Text);
             }
+
+            foreach (var VARIABLE in _listUsers)
+            {
+                Console.WriteLine(VARIABLE);
+            }
             return true;
         }
         private void PostNum_OnPreviewTextInput(object sender, TextCompositionEventArgs e)

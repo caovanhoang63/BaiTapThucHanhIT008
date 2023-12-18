@@ -162,7 +162,10 @@ namespace InstagramAutoTool.Model
                 {
                     await User.AutoFollow(_driver,_runingHelper);
                 }
-        
+
+                if (listFunc[0] == false && listFunc[2] == false)
+                    return;
+                
                 User.CLickToFirstPost(_driver,_cancellationTokenSource);
 
                 string postLink;

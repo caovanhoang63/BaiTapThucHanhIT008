@@ -186,11 +186,11 @@ namespace InstagramAutoTool.View
 
         public bool CheckHaveUserAccount()
         {
-            _listAccount.Clear();
             if (UserName.Text == String.Empty && _listAccount.Count == 0  )
                 return false;
-            if (MultiAccount.IsChecked != true &&_listAccount.Count == 0) 
+            if (MultiAccount.IsChecked != true) 
             {
+                _listAccount.Clear();
                 _listAccount.Add(new Pair<string, string>(UserName.Text,Password.Password));
             }
             return true;
