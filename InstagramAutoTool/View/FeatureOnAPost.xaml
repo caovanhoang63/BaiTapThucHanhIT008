@@ -16,7 +16,7 @@
     <StackPanel Margin="10">
         <StackPanel Orientation="Horizontal">
             <Label >Link bài viết: </Label>
-            <TextBox Name="LinkPost" Style="{DynamicResource BaseTextBox}"
+            <TextBox  Name="LinkPost" Style="{DynamicResource BaseTextBox}"
                      Width="250"></TextBox>
         </StackPanel>
 
