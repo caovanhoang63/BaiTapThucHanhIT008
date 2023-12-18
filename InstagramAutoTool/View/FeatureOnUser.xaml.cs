@@ -84,10 +84,6 @@ namespace InstagramAutoTool.View
                 MessageBox.Show("Vui lòng chọn số lượng bài viết");
                 return;
             }
-            int x = _mainWindow.ListAccount.Count;
-            MessageBox.Show(x.ToString());
-            int y = ListUsers.Count;
-            MessageBox.Show(y.ToString());
             foreach (var account in _mainWindow.ListAccount)
             { 
                 if (!_mainWindow.Login(account.First,account.Second))
@@ -97,12 +93,9 @@ namespace InstagramAutoTool.View
                     _mainWindow.Selenium.Stop();
                     continue;
                 }
-
-
                 await Task.Delay(4000);
                 int limit = 0;
                
-                 
                  if (PostNum.IsEnabled)
                       limit = int.Parse(PostNum.Text);
                 else

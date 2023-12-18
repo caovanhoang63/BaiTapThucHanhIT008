@@ -11,6 +11,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 using static InstagramAutoTool.View.MainWindow;
 
 namespace InstagramAutoTool.Model
@@ -104,15 +105,8 @@ namespace InstagramAutoTool.Model
             Console.WriteLine("Done");
 
             IWebElement container;
-            try
-            {
 
-                container=  _driver.FindElement(By.XPath("//div[@class='_aamn']"));
-            }
-            catch
-            {
-                container= _driver.FindElement(By.XPath("//div[contains(@class, '_aatk') and contains(@class,'_aatl')]"));
-            }
+            container= _driver.FindElement(By.XPath("//div[contains(@class, '_aatk') and contains(@class,'_aatl')]"));
             do
             {
                 try
@@ -121,7 +115,6 @@ namespace InstagramAutoTool.Model
                     foreach (var img in imgs)
                     {
                         links.Add(img.GetAttribute("src"));
-                        Console.WriteLine("Done1");
                     }
                 }
                 catch
@@ -129,20 +122,17 @@ namespace InstagramAutoTool.Model
                     continue;
                 }
 
-            } while (await NavigateToNextImage(container));
+            } while (await NavigateToNextImage(_driver,container));
 
-            Console.WriteLine("Done");
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
                 foreach (var link in links)
                 {
-                    Console.WriteLine(link);
                     await Task.Run(() =>
                     {
                         webClient.DownloadFile(new Uri(link), folderPath + "\\_"+ userDest + "_" + i + ".jpg");
                         _runingHelper.ImageDownload+=1;
-                        Console.WriteLine(i);
                     });
                     i++;
                 }
@@ -173,7 +163,6 @@ namespace InstagramAutoTool.Model
                     foreach (var img in imgs)
                     {
                         links.Add(img.GetAttribute("src"));
-                        Console.WriteLine("Done1");
                     }
                 }
                 catch
@@ -181,9 +170,8 @@ namespace InstagramAutoTool.Model
                     continue;
                 }
 
-            } while (await NavigateToNextImage(container));
+            } while (await NavigateToNextImage(_driver,container));
 
-            Console.WriteLine("Done");
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
@@ -197,25 +185,11 @@ namespace InstagramAutoTool.Model
                     });
                     i++;
                 }
-
+            
             }
         }
 
-        private static async Task<bool> NavigateToNextImage(IWebElement container)
-        {
-            try
-            {
-                var nextButton = container.FindElement(By.XPath("//button[@class=' _afxw _al46 _al47']"));
 
-                nextButton.Click();
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
 
         public static async Task DownLoadAllComment(IWebDriver _driver, string folderPath, RuningHelper _runingHelper)
         {
@@ -261,7 +235,7 @@ namespace InstagramAutoTool.Model
                 {
                     await Task.Run(() =>
                     {
-                        File.WriteAllLines(folderPath + "\\" + "userDest" + ".txt", comments);
+                        File.WriteAllLines(folderPath + "\\" + "comments" + ".txt", comments);
                     });
                 }
                 catch (Exception ex)
@@ -365,6 +339,22 @@ namespace InstagramAutoTool.Model
             {
             }
 
+        }
+        
+        
+        
+        private static async Task<bool> NavigateToNextImage(IWebDriver _driver ,IWebElement container)
+        {
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(1));
+            try
+            {
+                wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@class=' _afxw _al46 _al47']"))).Click();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
     }

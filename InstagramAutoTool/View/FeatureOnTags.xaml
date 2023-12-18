@@ -24,7 +24,7 @@
                                  Width="250"></TextBox>
                     </StackPanel>
                     <ToggleButton x:Name="MultiHashTagToggleButton"
-                                  Margin="0 10 0 0"
+                                  Width="250"  Margin="13 10 0 0"
                                   Unchecked="MultiHashTagToggleButton_OnUnchecked"
                                   Checked="MultiHashTagToggleButton_OnChecked">
                         Nhập nhiều HashTag

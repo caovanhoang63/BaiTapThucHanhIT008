@@ -254,6 +254,7 @@ namespace InstagramAutoTool.Model
             await Task.Delay(300);
 
             User.CLickToFirstPost(_driver, _cancellationTokenSource);
+            
             await Task.Delay(500);
             int count = 1;
             while (true)
