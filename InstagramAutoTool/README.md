@@ -13,7 +13,7 @@
 
 ### Supervisors:
 
-* KS.Vũ Tuấn Hải - Khoa Công nghệ phần mềm, Trường ĐH Công nghệ thông tin - ĐHQGHCM - [Github](https://github.com/vutuanhai237) 
+* Ths.Vũ Tuấn Hải - Khoa Công nghệ phần mềm, Trường ĐH Công nghệ thông tin - ĐHQGHCM - [Github](https://github.com/vutuanhai237) 
 
 
 ## Video demo:  
