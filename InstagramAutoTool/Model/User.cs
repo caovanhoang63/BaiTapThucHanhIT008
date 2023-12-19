@@ -10,15 +10,27 @@ namespace InstagramAutoTool.Model
         /// <summary>
         /// Click to the first post of the userDest
         /// </summary>
-        public static void CLickToFirstPost(IWebDriver _driver,CancellationTokenSource _cancellationTokenSource)
+        public static bool CLickToFirstPost(IWebDriver _driver,CancellationTokenSource _cancellationTokenSource)
         {
-            
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-            var post =  _driver.FindElement(By.XPath("//div[@class='_aagu']"));
-            if (_cancellationTokenSource.IsCancellationRequested)
-                return;
-            post.Click();
+            try
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return false;
+                var post = _driver.FindElement(By.XPath("//div[@class='_aagu']"));
+                if (_cancellationTokenSource.IsCancellationRequested)
+                    return false;
+                post.Click();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            finally
+            {
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            }
         }
         
         

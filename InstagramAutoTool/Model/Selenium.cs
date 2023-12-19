@@ -165,8 +165,12 @@ namespace InstagramAutoTool.Model
 
                 if (listFunc[0] == false && listFunc[2] == false)
                     return;
+
+                if (!User.CLickToFirstPost(_driver, _cancellationTokenSource))
+                    return;
                 
-                User.CLickToFirstPost(_driver,_cancellationTokenSource);
+
+        
 
                 string postLink;
                 string prevLink = string.Empty;
@@ -253,7 +257,9 @@ namespace InstagramAutoTool.Model
                 string prevLink = string.Empty;
                 await Task.Delay(300);
 
-                User.CLickToFirstPost(_driver, _cancellationTokenSource);
+
+                if (!User.CLickToFirstPost(_driver, _cancellationTokenSource))
+                    return;
             
                 await Task.Delay(500);
                 int count = 1;
@@ -338,7 +344,8 @@ namespace InstagramAutoTool.Model
                 string prevLink = string.Empty;
                 await Task.Delay(500);
 
-                User.CLickToFirstPost(_driver, _cancellationTokenSource);
+                
+                if(!User.CLickToFirstPost(_driver, _cancellationTokenSource)) return;
                 
                 await Task.Delay(500);
                 int count = 1;
