@@ -68,7 +68,7 @@
                 <Label Margin="0 0 0 20">	● Crawler:</Label>
                 <CheckBox Name="DownloadImage">Download ảnh</CheckBox>
                 <CheckBox Name="DownloadComment">Download comment</CheckBox>
-                <CheckBox Visibility="Hidden"></CheckBox>
+                <CheckBox Name="DownloadDescription">Download mô tả</CheckBox>
                 <Button  Click="RunCrawlerButton_OnClick">Chạy Crawler</Button>
             </StackPanel>
         </StackPanel>

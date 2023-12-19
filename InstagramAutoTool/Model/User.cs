@@ -33,7 +33,6 @@ namespace InstagramAutoTool.Model
             }
         }
         
-        
         /// <summary>
         /// Auto Follow user
         /// </summary>

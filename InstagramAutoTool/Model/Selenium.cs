@@ -30,26 +30,6 @@ namespace InstagramAutoTool.Model
         
         
         
-        public Selenium(string userProfile,CancellationTokenSource cancellationTokenSource)
-        {
-            var options = new ChromeOptions();
-            options.AddArgument("test-type");
-            options.AddArgument("--ignore-certificate-errors");
-            options.AddArgument("no-sandbox");
-            options.AddArgument("disable-infobars");
-            //options.AddArgument("--headless"); //hide browser
-            options.AddArgument("--start-maximized");
-            //options.AddArgument("--window-size=1100,300");
-            //options.AddUserProfilePreference("profile.default_content_setting_values.images", 2);
-            
-            // Profile [Change:User name]
-            options.AddArgument(@"user-data-dir=C:\Users\ADMIN\AppData\Local\Google\Chrome\User Data");
-            var service = ChromeDriverService.CreateDefaultService();
-            _driver = new ChromeDriver(service, options);
-            
-            _runingHelper = new RuningHelper(); 
-            _cancellationTokenSource = cancellationTokenSource;
-        }
         
         public Selenium(CancellationTokenSource cancellationTokenSource)
         {
@@ -64,7 +44,6 @@ namespace InstagramAutoTool.Model
             options.AddArgument("no-sandbox");
             options.AddArgument("disable-infobars");
             options.AddArgument("--start-maximized");
-            
             _driver = new ChromeDriver(service,options);
             _runingHelper = new RuningHelper();
             
@@ -275,6 +254,9 @@ namespace InstagramAutoTool.Model
                     if(listFunc[1])
                         await Post.DownLoadAllComment(_driver, postFolder, _runingHelper);
 
+                    if (listFunc[2])
+                        await Post.DownloadDescription(_driver, postFolder);
+                    
                     postLink = await NavigateToNextPost();
                     if (postLink == prevLink)
                         return;

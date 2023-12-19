@@ -135,7 +135,7 @@ namespace InstagramAutoTool.View
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
 
-            bool[] listFunc = { false, false };
+            bool[] listFunc = { false, false, false };
             foreach (var child in CrawlerCheckList.Children)
             {
                 if (child is CheckBox cb)
@@ -147,6 +147,8 @@ namespace InstagramAutoTool.View
                         listFunc[0] = true;
                     if (cb.Name == "DownloadComment")
                         listFunc[1] = true;
+                    if (cb.Name == "DownloadDescription")
+                        listFunc[2] = true;
                 }
             }
 
