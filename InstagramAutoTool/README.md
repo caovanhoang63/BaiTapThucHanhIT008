@@ -32,7 +32,7 @@ This is an application that allows users to perform various actions on Instagram
 * Step 2: Go to the path ..\BaiTapThucHanhIT008\InstagramAutoTool\bin\Debug\, then run the InstagramAutoTool.exe file
 * Step 3 : Utilizing the Application Features:
 
-### Or you just need to download [this installation](https://l.facebook.com/l.php?u=https%3A%2F%2Fdrive.google.com%2Ffile%2Fd%2F1jbNFpl2lyPlSbiY7TepX40uNWBwFyJlL%2Fview%3Fusp%3Dsharing%26fbclid%3DIwAR1aXSGVLgT8AlLqu_Ax8xkoXfluhDgp3pXdIqlW9URoSHa68u8JNqmQ-8w&h=AT2gM8jbYGSoTGue9EsVdB2-XDGOGRm7azkdmDsyEMNO2utKKneMS1OnIsdV8yLBDKSOsZ_c9sMmQLoeFd0Pxi1ssw6ohF944QbZt5hSRyCnVWJ1EK3pb6ezPTuKcCDODlBOoQ) file and run
+### Or you just need to download [this installation](https://drive.google.com/file/d/1jbNFpl2lyPlSbiY7TepX40uNWBwFyJlL/view?usp=sharing) file and run
 ## Additional information: 
 
 Welcome! We appreciate your use of our project, and we are delighted that our project has been helpful to you. We eagerly welcome any contributions or feedback from you to enhance and improve the project further.
