@@ -55,7 +55,7 @@ Harassment or bullying
 Hostile or threatening opinions
 Any behavior that may pose a danger to others or the organization
 ### Reporting Violations
-If you witness any inappropriate behavior or a violation of the Code of Conduct, please report it to [Email](dohuy22314@gmail.com)
+If you witness any inappropriate behavior or a violation of the Code of Conduct, please report it to us
 ## License:  
 MIT License
 
