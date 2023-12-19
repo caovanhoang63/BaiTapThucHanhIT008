@@ -15,6 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ApplicationIcon>Assets\Icon\SeleniumAutoToolLogo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="bin\Debug\SeleniumAutoToolLogo.png" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +171,7 @@
     <Page Include="View\MainWindow.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icon\SeleniumAutoToolLogo.ico" />
     <Content Include="README.md" />
     <Resource Include="Assets\Images\SeleniumAutoToolLogo.png" />
   </ItemGroup>
