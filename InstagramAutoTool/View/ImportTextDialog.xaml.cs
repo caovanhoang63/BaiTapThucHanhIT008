@@ -43,7 +43,7 @@ namespace InstagramAutoTool.View
         {
             string richText = new TextRange(RichTextBox.Document.ContentStart, RichTextBox.Document.ContentEnd).Text;
 
-            _lines =  richText.Trim().Split('\n');
+            _lines = richText.Trim().Split('\n');
             
             DialogResult = true;
         }

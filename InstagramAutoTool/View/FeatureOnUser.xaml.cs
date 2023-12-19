@@ -135,7 +135,6 @@ namespace InstagramAutoTool.View
         private async void RunCrawlerButton_OnClick(object sender, RoutedEventArgs e)
         {
 
-
             bool[] listFunc = { false, false };
             foreach (var child in CrawlerCheckList.Children)
             {
@@ -212,7 +211,11 @@ namespace InstagramAutoTool.View
                         limit = int.Parse(PostNum.Text);
                     else
                         limit = -1;
-                    await _mainWindow.Selenium.RunCraw(UserNameDest.Text,limit, listFunc, folderPath);
+                    
+                    foreach (var user in _listUsers)
+                    {
+                        await _mainWindow.Selenium.RunCraw(user.Trim(),limit, listFunc, folderPath);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -281,6 +284,7 @@ namespace InstagramAutoTool.View
         {
             if (UserNameDest.Text == String.Empty && _listUsers.Count == 0)
                 return false;
+            
             if (MultiUsers.IsChecked != true )
             {
                 _listUsers.Clear();

@@ -147,9 +147,7 @@ namespace InstagramAutoTool.Model
 
         public static async Task DownLoadAllImageByLink(IWebDriver _driver, string folderPath,string userDest, RuningHelper _runingHelper)
         {
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
             HashSet<string> links = new HashSet<string>();
-
             IWebElement container;
             try
             {
@@ -160,6 +158,7 @@ namespace InstagramAutoTool.Model
             {
                 container = _driver.FindElement(By.XPath("//div[contains(@class, '_aagv')"));
             }
+            
             do
             {
                 try
@@ -177,19 +176,31 @@ namespace InstagramAutoTool.Model
 
             } while (await NavigateToNextImage(_driver,container));
 
+
+            foreach (var link in links)
+            {
+                Console.WriteLine(link.Trim());
+            }
+            
             using (WebClient webClient = new WebClient())
             {
                 int i = 1;
                 foreach (var link in links)
                 {
-                    await Task.Run(() =>
+                    try
                     {
-                        webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
-                        _runingHelper.ImageDownload += 1;
-                    });
-                    i++;
+                        await Task.Run(() =>
+                        {
+                            webClient.DownloadFile(new Uri(link), folderPath + "\\" + "img_" + i + ".jpg");
+                            _runingHelper.ImageDownload += 1;
+                        });
+                        i++;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Can't download video!");
+                    }
                 }
-            
             }
         }
 
@@ -359,8 +370,7 @@ namespace InstagramAutoTool.Model
             try
             {
                 _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(1);
-                wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@class=' _afxw _al46 _al47']")))
-                    .Click();
+                wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//button[@class=' _afxw _al46 _al47']"))).Click();
                 return true;
             }
             catch (Exception e)
@@ -370,7 +380,6 @@ namespace InstagramAutoTool.Model
             finally
             {
                 _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
             }
         }
 

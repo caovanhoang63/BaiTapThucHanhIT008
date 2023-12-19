@@ -68,7 +68,7 @@ namespace InstagramAutoTool.View
            OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "File|*.txt;...";
            // if (openFileDialog.ShowDialog() == true)
-            {
+           {
                 if (openFileDialog.CheckPathExists)
                 {
                     RichTextBox.Document.Blocks.Clear();

@@ -71,9 +71,9 @@ namespace InstagramAutoTool.Model
             _javaScriptExecutor = (IJavaScriptExecutor)_driver;
             _action = new Actions(_driver);
             
-            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
-            _driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(10);
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(30);
+            _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(30);
+            _driver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(30);
             
             _cancellationTokenSource = cancellationTokenSource;
             
@@ -311,6 +311,7 @@ namespace InstagramAutoTool.Model
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 ShowErrorMessageBox();
             }
             

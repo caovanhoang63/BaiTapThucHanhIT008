@@ -97,13 +97,13 @@ namespace InstagramAutoTool.View
                 {
                     foreach(var post in _listPost) 
                     {
-                        await _mainWindow.Selenium.RunBuffAPost(post, listFunc, comment);
+                        await _mainWindow.Selenium.RunBuffAPost(post.Trim(), listFunc, comment);
                     }
                 }
                 else
                     foreach (var post in _listPost)
                     {
-                        await _mainWindow.Selenium.RunBuffAPost(post, listFunc);
+                        await _mainWindow.Selenium.RunBuffAPost(post.Trim(), listFunc);
                     }
                 _mainWindow.Selenium.Stop();
             }
@@ -163,7 +163,6 @@ namespace InstagramAutoTool.View
             _mainWindow.StopButton.IsEnabled = true;
 
             //  Console.WriteLine("Run");
-            int i = 1;
 
             if (!_mainWindow.Login())
             {
@@ -175,17 +174,14 @@ namespace InstagramAutoTool.View
             {
                 foreach (var post in _listPost)
                 {
-                    await Task.Delay(4000);
                     try
                     {
-                        await _mainWindow.Selenium.RunCrawAPost(post, listFunc, folderPath);
+                        await _mainWindow.Selenium.RunCrawAPost(post.Trim(), listFunc, folderPath);
                     }
                     catch (Exception exception)
                     {
                         Console.WriteLine(exception);
                     }
-
-                    i++;
 
                 }
                 _mainWindow.Selenium.Stop();
