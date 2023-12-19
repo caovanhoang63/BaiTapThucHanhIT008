@@ -14,7 +14,7 @@ namespace InstagramAutoTool.Model
         {
             try
             {
-                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(3);
+                _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(8);
                 if (_cancellationTokenSource.IsCancellationRequested)
                     return false;
                 var post = _driver.FindElement(By.XPath("//div[@class='_aagu']"));
